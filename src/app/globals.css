@@ -1,56 +1,224 @@
 @import "tailwindcss";
 
-/* تعریف رنگ‌ها و انیمیشن‌های سفارشی برای Tailwind v4 */
+/* ============================================
+   متغیرهای CSS - حالت روشن
+   ============================================ */
+:root {
+  --background: #eeeeee;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #3b82f6;
+  --secondary: #8b5cf6;
+  --accent: #06b6d4;
+  --muted: #f1f5f9;
+  --muted-foreground: #000000;
+  --border: #e2e8f0;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   متغیرهای CSS - حالت تاریک
+   ============================================ */
+.dark {
+  --background: #030712;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --primary: #3b82f6;
+  --secondary: #8b5cf6;
+  --accent: #06b6d4;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   تعریف توکن‌ها برای Tailwind v4
+   ============================================ */
 @theme {
+  /* رنگ‌ها */
   --color-primary: #3b82f6;
   --color-secondary: #8b5cf6;
   --color-accent: #06b6d4;
   --color-dark: #030712;
-  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+
+  /* فونت‌ها */
   --font-sans: var(--font-vazir), system-ui, sans-serif;
-  
+  --font-latin: var(--font-space-grotesk), system-ui, sans-serif;
+
+  /* انیمیشن fade-up */
   --animate-fade-up: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  
+
   @keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
+/* ============================================
+   استایل‌های پایه
+   ============================================ */
 @layer base {
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+  }
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    /* حالا bg-dark به درستی شناخته می‌شود */
-    @apply bg-dark text-slate-100 antialiased selection:bg-primary selection:text-white;
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased selection:bg-primary selection:text-white transition-colors duration-300;
   }
-  
+
   /* جلوگیری از زوم خودکار iOS */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     font-size: 16px !important;
   }
 }
 
+/* ============================================
+   کلاس‌های کمکی برای تم
+   ============================================ */
 @layer components {
-  .glass-panel {
-    @apply bg-slate-900/60 backdrop-blur-xl border border-white/10;
+  /* رنگ متن‌ها */
+  .text-body {
+    color: var(--foreground);
   }
-  
+
+  .text-muted-custom {
+    color: var(--muted-foreground);
+  }
+
+  .text-heading {
+    color: var(--foreground);
+  }
+
+  /* پس‌زمینه‌ها */
+  .bg-card-custom {
+    background-color: var(--card);
+  }
+
+  .bg-background {
+    background-color: var(--background);
+  }
+
+  /* بوردرها */
+  .border-custom {
+    border-color: var(--border);
+  }
+
+  /* پنل شیشه‌ای */
+  .glass-panel {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    @apply transition-colors duration-300;
+  }
+
+  /* گرادیان متن */
   .text-gradient {
     @apply bg-gradient-to-br from-primary via-secondary to-accent bg-clip-text text-transparent;
   }
+
+  /* فونت لاتین */
+  .font-latin {
+    font-family: var(--font-latin);
+  }
 }
 
-/* اسکرول‌بار سفارشی */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  /* برای هماهنگی کامل در همه مرورگرها، جهت فریم انیمیشن چپ به راست تعریف می‌شود */
+  direction: ltr; 
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  shrink: 0;
+  min-width: 100%;
+  /* انیمیشن رفتن به چپ برای حرکت از راست به چپ */
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+
+/* توقف در زمان Hover */
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* احترام به تنظیم کاهش حرکت کاربر */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+/* احترام به تنظیم کاهش حرکت کاربر */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+/* احترام به تنظیم کاهش حرکت کاربر */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ============================================
+   اسکرول‌بار سفارشی
+   ============================================ */
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #030712; /* رنگ dark */
+  background: var(--background);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #3b82f6; /* رنگ primary */
+  background: var(--primary);
   border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
 }

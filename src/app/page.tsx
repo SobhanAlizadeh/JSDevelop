@@ -21,7 +21,7 @@ export default function Home() {
       <SceneWrapper />
 
       {/* تمام بخش‌ها relative و z-10 هستند تا روی بوم سه‌بعدی قرار بگیرند */}
-      <main className="relative z-10">
+      <main className="relative z-10 overflow-x-hidden">
         <HeroSection />
         <StatsSection />
         <ServicesSection />

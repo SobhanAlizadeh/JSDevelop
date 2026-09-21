@@ -2,6 +2,16 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 
 const services = [
+   {
+    icon: "workflow",
+    title: "اتوماسیون هوشمند n8n",
+    description: "اتصال CRM، ایمیل و بیش از ۴۰۰ اپلیکیشن با ورک‌فلوهای هوشمند و خطای صفر.",
+  },
+  {
+    icon: "box",
+    title: "وب سه‌بعدی (Three.js)",
+    description: "تجربه‌های غوطه‌ور با WebGL و شیدرهای سفارشی، ۶۰ فریم روان روی همه دستگاه‌ها.",
+  },
   {
     icon: "search",
     title: "سئو و بهینه‌سازی وب‌سایت",
@@ -52,16 +62,7 @@ const services = [
     title: "هویت بصری",
     description: "طراحی لوگو، پالت رنگ و سند کامل راهنمای برند برای هویتی منسجم و یکتا.",
   },
-  {
-    icon: "workflow",
-    title: "اتوماسیون n8n",
-    description: "اتصال CRM، ایمیل و بیش از ۴۰۰ اپلیکیشن با ورک‌فلوهای هوشمند و خطای صفر.",
-  },
-  {
-    icon: "box",
-    title: "وب سه‌بعدی (Three.js)",
-    description: "تجربه‌های غوطه‌ور با WebGL و شیدرهای سفارشی، ۶۰ فریم روان روی همه دستگاه‌ها.",
-  },
+ 
 ];
 
 export function ServicesSection() {

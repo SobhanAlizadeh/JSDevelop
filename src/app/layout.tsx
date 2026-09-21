@@ -1,16 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn } from "next/font/google";
+import { Vazirmatn, Space_Grotesk } from "next/font/google"; // ✅ هر دو فونت در یک خط ایمپورت شدند
+import { ThemeProvider } from "next-themes";
 import { defaultMetadata, siteConfig } from "@/lib/metadata";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
+// فونت فارسی
 const vazir = Vazirmatn({
   subsets: ["arabic"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-vazir",
   display: "swap",
   preload: true,
+});
+
+// فونت انگلیسی برای شرکا
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +37,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-// JSON-LD برای Organization
+// JSON-LD Schema برای Organization
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -51,6 +61,7 @@ const organizationSchema = {
   },
 };
 
+// JSON-LD Schema برای WebSite
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -67,40 +78,43 @@ export default function RootLayout({
     <html
       lang="fa"
       dir="rtl"
-      className={`${vazir.variable} scroll-smooth`}
+      className={`${vazir.variable} ${spaceGrotesk.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
         />
       </head>
-      <body className={vazir.className}>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:z-50 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
-        >
-          پرش به محتوا
-        </a>
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
 
-        {/* Analytics - فقط در production */}
-        {process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID} />
-        )}
+      <body className={`${vazir.className} antialiased selection:bg-primary selection:text-white`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:z-50 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+          >
+            پرش به محتوا
+          </a>
+
+          <Header />
+          <main id="main-content" className="overflow-x-hidden">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-
-// import را به بالای فایل اضافه کنید
-import { GoogleAnalytics } from "@/components/analytics/Analytics";

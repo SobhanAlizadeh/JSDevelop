@@ -1,9 +1,9 @@
 "use client";
 
-import { ArrowLeft, type LucideIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import * as Icons from "lucide-react";
+import { getIcon } from "@/lib/icons";
 
 interface ServiceCardProps {
   icon: string;
@@ -13,7 +13,7 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ icon, title, description, index }: ServiceCardProps) {
-  const IconComponent = Icons[icon as keyof typeof Icons] as LucideIcon;
+  const IconComponent = getIcon(icon);
 
   return (
     <motion.div
@@ -24,10 +24,14 @@ export function ServiceCard({ icon, title, description, index }: ServiceCardProp
       className="group glass-panel p-5 md:p-6 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2"
     >
       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-        {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
+        {IconComponent ? (
+          <IconComponent className="w-6 h-6 text-primary" />
+        ) : (
+          <div className="w-6 h-6 bg-primary/20 rounded" />
+        )}
       </div>
-      <h3 className="text-base md:text-lg font-bold mb-2 text-white">{title}</h3>
-      <p className="text-xs md:text-sm text-slate-400 leading-relaxed mb-4">
+      <h3 className="text-base md:text-lg font-bold mb-2 text-heading">{title}</h3>
+      <p className="text-xs md:text-sm text-muted-custom leading-relaxed mb-4">
         {description}
       </p>
       <Link

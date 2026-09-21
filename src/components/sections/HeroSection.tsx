@@ -6,8 +6,7 @@ import Link from "next/link";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20">
-      {/* دیگر نیازی به Scene3D اینجا نیست */}
+<section className="relative min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20 overflow-hidden">      {/* دیگر نیازی به Scene3D اینجا نیست */}
       
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -30,7 +29,7 @@ export function HeroSection() {
               <span className="text-gradient">سطحی تازه</span> می‌بریم
             </h1>
 
-            <p className="text-base md:text-lg text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p className="text-base md:text-lg text-muted-custom leading-relaxed max-w-xl mx-auto lg:mx-0">
               با استراتژی‌های پیشرفته بازاریابی دیجیتال، طراحی وب‌سایت‌های
               سه‌بعدی با Three.js و اتوماسیون هوشمند با n8n، رشد کسب‌وکار شما
               را تسریع می‌کنیم.
