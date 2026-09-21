@@ -15,9 +15,7 @@ const nextConfig: NextConfig = {
   },
   // این خط باعث می‌شود هشدار توربوپک برطرف شود
   turbopack: {}, 
-    allowedDevOrigins: ['127.0.0.1
-      
-      '],
+    allowedDevOrigins: ['127.0.0.1', 'localhost', '*'],
 };
 
 export default nextConfig;

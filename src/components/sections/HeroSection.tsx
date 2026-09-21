@@ -5,19 +5,23 @@ import { ArrowLeft, Briefcase, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// Lazy load برای بهینه‌سازی Core Web Vitals
-const Scene3D = dynamic(() => import("@/components/three/Scene3D").then(mod => ({ default: mod.Scene3D })), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 z-0 flex items-center justify-center">
-      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-secondary animate-pulse"></div>
-    </div>
-  ),
-});
+// Lazy load با Suspense
+const Scene3D = dynamic(
+  () => import("@/components/three/Scene3D").then((mod) => mod.Scene3D),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="absolute inset-0 z-0 flex items-center justify-center">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-secondary animate-pulse"></div>
+      </div>
+    ),
+  }
+);
 
 export function HeroSection() {
   return (
     <section className="relative min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20 overflow-hidden">
+      {/* بک‌گراند سه‌بعدی با Bloom */}
       <Scene3D />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
