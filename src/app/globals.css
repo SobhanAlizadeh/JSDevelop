@@ -222,3 +222,20 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--secondary);
 }
+
+/* ============================================
+   انیمیشن امن برای باز/بسته شدن (بدون CLS)
+   ============================================ */
+.expandable-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.expandable-content.open {
+  grid-template-rows: 1fr;
+}
+
+.expandable-inner {
+  overflow: hidden;
+}

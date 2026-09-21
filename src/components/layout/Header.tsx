@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -44,7 +45,6 @@ export function Header() {
 
   const navLinks = [
     { href: "#services", label: "خدمات" },
-    { href: "#portfolio", label: "نمونه‌کارها" },
     { href: "#about", label: "درباره ما" },
     { href: "#contact", label: "تماس" },
   ];
@@ -55,12 +55,17 @@ export function Header() {
       <header className="fixed top-0 w-full z-50 glass-panel border-b border-custom">
         <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-              JS
-            </div>
+            
             <span className="text-xl font-bold tracking-tight text-heading">
               JSDevelop
             </span>
+            <Image
+              src="/logo.webp"
+              alt="JSDevelop Logo"
+              width={40}
+              height={40}
+              className="rounded-xl"
+            />
           </Link>
 
           <nav

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
 
 const stats = [
-  { value: "۰+", label: "سال تجربه" },
+  { value: "۱۵+", label: "سال تجربه" },
   { value: "۲۵۶+", label: "مشتری راضی" },
   { value: "۵۱۴+", label: "پروژه موفق" },
   { value: "۱۲", label: "خدمت تخصصی" },
