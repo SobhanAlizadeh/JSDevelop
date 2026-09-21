@@ -18,8 +18,8 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
           <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, y: -20, scale: 0.95 }} // استفاده از transform
+            animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8 }}
           >
             <span className="text-accent font-semibold tracking-wider text-xs md:text-sm uppercase">
@@ -90,7 +90,7 @@ export function AboutSection() {
           <h4 className="text-xs md:text-sm font-semibold text-muted-custom mb-6 uppercase tracking-wider text-center">
             شرکای معتبر ما
           </h4>
-          
+
           {/* دیگر نیازی به کلاس‌های منفی مارجین نیست */}
           <PartnerMarquee />
         </motion.div>

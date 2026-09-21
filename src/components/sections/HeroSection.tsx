@@ -1,21 +1,15 @@
 "use client";
 
 import { ArrowLeft, Briefcase, CheckCircle } from "lucide-react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 export function HeroSection() {
   return (
-<section className="relative min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20 overflow-hidden">      {/* دیگر نیازی به Scene3D اینجا نیست */}
-      
+    <section className="relative min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6 md:space-y-8 text-center lg:text-right"
-          >
+          {/* حذف motion.div و استفاده از انیمیشن CSS */}
+          <div className="space-y-6 md:space-y-8 text-center lg:text-right animate-fade-up">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-primary text-xs md:text-sm font-semibold border border-primary/20">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -24,7 +18,8 @@ export function HeroSection() {
               آژانس دیجیتال — از سال ۲۰۰۹
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
+            {/* این H1 عنصر LCP است. باید بدون تاخیر JS رندر شود */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight text-heading">
               حضور دیجیتال کسب‌وکار شما را به{" "}
               <span className="text-gradient">سطحی تازه</span> می‌بریم
             </h1>
@@ -47,22 +42,22 @@ export function HeroSection() {
               </Link>
               <Link
                 href="#portfolio"
-                className="px-8 py-4 rounded-xl font-bold border border-white/10 hover:bg-white/5 transition-all flex items-center justify-center gap-2"
+                className="px-8 py-4 rounded-xl font-bold border border-custom hover:bg-card-custom transition-all flex items-center justify-center gap-2 text-body"
               >
                 <Briefcase className="w-5 h-5 text-secondary" />
                 مشاهده نمونه‌کارها
               </Link>
             </div>
 
-            <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6 pt-4 border-t border-white/10">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6 pt-4 border-t border-custom">
               {["تیم متخصص سئو", "تحویل به‌موقع", "پشتیبانی مستمر"].map((item) => (
-                <div key={item} className="flex items-center gap-2 text-xs md:text-sm text-slate-400">
+                <div key={item} className="flex items-center gap-2 text-xs md:text-sm text-muted-custom">
                   <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
                   {item}
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
