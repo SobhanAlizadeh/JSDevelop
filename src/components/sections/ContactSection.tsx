@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/metadata";
 export function ContactSection() {
   return (
     <section id="contact" className="relative z-10 py-16 md:py-24 lg:py-32 bg-slate-900/50">
-      <div className="container mx-auto px-4 sm:px-6">
+      <div className="container mx-auto px-4 sm:px-6 glass-panel p-6 rounded-2xl">
         <SectionHeader
           kicker="تماس با ما"
           title="در ارتباط باشید"
