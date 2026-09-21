@@ -1,62 +1,61 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
+// تعریف اینترفیس برای دریافت propها
 interface ParticlesProps {
-  count?: number;
+  count: number;
+  isMobile: boolean;
 }
 
-export function Particles({ count = 1500 }: ParticlesProps) {
+export function Particles({ count, isMobile }: ParticlesProps) {
   const meshRef = useRef<THREE.Points>(null);
+  const materialRef = useRef<THREE.PointsMaterial>(null);
 
-  const { positions, colors } = useMemo(() => {
+  const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const cols = new Float32Array(count * 3);
-    
-    const color1 = new THREE.Color("#3b82f6"); // آبی
-    const color2 = new THREE.Color("#8b5cf6"); // بنفش
-    
     for (let i = 0; i < count * 3; i += 3) {
-      // موقعیت‌ها
       pos[i] = (Math.random() - 0.5) * 25;
       pos[i + 1] = (Math.random() - 0.5) * 25;
       pos[i + 2] = (Math.random() - 0.5) * 25;
-      
-      // رنگ‌ها (مخلوط آبی و بنفش)
-      const mixedColor = color1.clone().lerp(color2, Math.random());
-      cols[i] = mixedColor.r;
-      cols[i + 1] = mixedColor.g;
-      cols[i + 2] = mixedColor.b;
     }
-    
-    return { positions: pos, colors: cols };
+    return pos;
   }, [count]);
 
-  useFrame((state) => {
+  useEffect(() => {
+    const updateColor = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      if (materialRef.current) {
+        materialRef.current.color.set(isDark ? "#a78bfa" : "#6d28d9");
+      }
+    };
+    
+    updateColor();
+    const observer = new MutationObserver(() => updateColor());
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  useFrame((_, delta) => {
     if (meshRef.current) {
-      const time = state.clock.getElapsedTime();
-      meshRef.current.rotation.y = time * 0.05;
-      meshRef.current.rotation.x = time * 0.02;
+      // در موبایل سرعت انیمیشن کمتر باشد
+      const speed = isMobile ? 0.02 : 0.05;
+      meshRef.current.rotation.y += delta * speed;
+      meshRef.current.rotation.x += delta * (speed * 0.4);
     }
   });
 
   return (
     <points ref={meshRef}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
-        vertexColors
+        ref={materialRef}
+        size={isMobile ? 0.06 : 0.04} // در موبایل کمی بزرگتر دیده شود چون تعداد کمتر است
+        color="#8b5cf6"
         transparent
         opacity={0.8}
         blending={THREE.AdditiveBlending}

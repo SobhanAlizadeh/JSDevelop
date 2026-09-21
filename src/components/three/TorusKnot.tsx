@@ -1,57 +1,74 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export function TorusKnot() {
+// تعریف اینترفیس برای دریافت prop
+interface TorusKnotProps {
+  isMobile: boolean;
+}
+
+export function TorusKnot({ isMobile }: TorusKnotProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const wireRef = useRef<THREE.Mesh>(null);
-  const groupRef = useRef<THREE.Group>(null);
 
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    
-    // دریافت مقدار اسکرول جهانی
-    const scrollY = typeof window !== "undefined" ? window.scrollY : 0;
+  const getThemeColors = () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    return {
+      wire: isDark ? "#60a5fa" : "#1d4ed8",
+      core: isDark ? "#1e293b" : "#cbd5e1",
+      metalness: isDark ? 0.9 : 0.6,
+    };
+  };
 
-    if (groupRef.current) {
-      // چرخش خودکار
-      groupRef.current.rotation.y += 0.003;
-      groupRef.current.rotation.x += 0.002;
-      
-      // حرکت موجی + جابجایی بر اساس اسکرول
-      groupRef.current.position.y = Math.sin(time * 0.5) * 0.2 + (scrollY * 0.001);
-    }
-    
-    // زوم دوربین بر اساس اسکرول (هرچه پایین‌تر می‌روید، دوربین نزدیک‌تر می‌شود)
-    const targetZ = 6 - (scrollY * 0.002);
-    state.camera.position.z += (targetZ - state.camera.position.z) * 0.05;
-
-    // تعامل با ماوس (فقط در دسکتاپ)
-    if (typeof window !== "undefined" && window.innerWidth > 768) {
-      const mouseX = (state.mouse.x * Math.PI) / 4;
-      const mouseY = (state.mouse.y * Math.PI) / 4;
-      
-      if (groupRef.current) {
-        groupRef.current.rotation.y += 0.05 * (mouseX - groupRef.current.rotation.y);
-        groupRef.current.rotation.x += 0.05 * (mouseY - groupRef.current.rotation.x);
+  useEffect(() => {
+    const updateColors = () => {
+      const colors = getThemeColors();
+      if (wireRef.current) {
+        (wireRef.current.material as THREE.MeshBasicMaterial).color.set(colors.wire);
       }
+      if (meshRef.current) {
+        const mat = meshRef.current.material as THREE.MeshStandardMaterial;
+        mat.color.set(colors.core);
+        mat.metalness = colors.metalness;
+        mat.needsUpdate = true;
+      }
+    };
+    
+    updateColors();
+    const observer = new MutationObserver(() => updateColors());
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  useFrame((_, delta) => {
+    // در موبایل سرعت چرخش کمی کمتر باشد تا CPU درگیر نشود
+    const speed = isMobile ? 0.3 : 0.5;
+    const rotationSpeed = speed * delta;
+
+    if (meshRef.current) {
+      meshRef.current.rotation.y += rotationSpeed;
+      meshRef.current.rotation.x += rotationSpeed * 0.5;
+    }
+    if (wireRef.current) {
+      wireRef.current.rotation.y += rotationSpeed;
+      wireRef.current.rotation.x += rotationSpeed * 0.5;
     }
   });
 
+  // کاهش شدید segments در موبایل برای افزایش پرفورمنس
+  const segments = isMobile ? [64, 16] : [128, 32];
+
   return (
-    <group ref={groupRef}>
-      {/* هسته فلزی */}
+    <group>
       <mesh ref={meshRef}>
-        <torusKnotGeometry args={[1.8, 0.6, 128, 32]} />
+        <torusKnotGeometry args={[1.8, 0.6, segments[0], segments[1]]} />
         <meshStandardMaterial color="#1e293b" roughness={0.1} metalness={0.9} />
       </mesh>
-      
-      {/* لایه وایرفریم درخشان */}
       <mesh ref={wireRef}>
-        <torusKnotGeometry args={[1.82, 0.62, 128, 32]} />
-        <meshBasicMaterial color="#3b82f6" wireframe transparent opacity={0.15} />
+        <torusKnotGeometry args={[1.82, 0.62, segments[0], segments[1]]} />
+        <meshBasicMaterial color="#3b82f6" wireframe transparent opacity={0.2} />
       </mesh>
     </group>
   );
