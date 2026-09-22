@@ -104,7 +104,7 @@ export function Header() {
         className={`mobile-menu fixed inset-0 z-[60] flex flex-col md:hidden ${isMenuOpen ? "open" : ""
           }`}
         aria-hidden={!isMenuOpen}
-        inert={!isMenuOpen ? "" : undefined}
+        inert={!isMenuOpen}
       >
         {/* Backdrop */}
         <div
