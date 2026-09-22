@@ -15,6 +15,7 @@ const NODE_META: Record<string, { icon: LucideIcon; color: string }> = {
   httprequest: { icon: Globe, color: "#38bdf8" },
   code: { icon: Code2, color: "#f59e0b" },
   if: { icon: GitBranch, color: "#34d399" },
+  wordpress: { icon: Globe, color: "#21759b" },
   gmail: { icon: Mail, color: "#f87171" },
   slack: { icon: MessageSquare, color: "#e879f9" },
   scheduletrigger: { icon: Clock, color: "#60a5fa" },
