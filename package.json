@@ -1,6 +1,6 @@
 {
   "name": "jsd_new",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -35,6 +35,7 @@
     "defaults",
     "not IE 11",
     "not IE_Mob 11",
+    "not dead",
     "maintain node versions"
   ]
 }

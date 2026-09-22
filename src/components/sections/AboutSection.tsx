@@ -87,9 +87,9 @@ export function AboutSection() {
           transition={{ duration: 1, delay: 0.3 }}
           className="mt-16 md:mt-24"
         >
-          <h4 className="text-xs md:text-sm font-semibold text-muted-custom mb-6 uppercase tracking-wider text-center">
+          <h3 className="text-xs md:text-sm font-semibold text-muted-custom mb-6 uppercase tracking-wider text-center">
             شرکای معتبر ما
-          </h4>
+          </h3>
 
           {/* دیگر نیازی به کلاس‌های منفی مارجین نیست */}
           <PartnerMarquee />

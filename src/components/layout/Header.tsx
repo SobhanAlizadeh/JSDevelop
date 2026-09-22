@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
-
+import { Logo } from "@/components/ui/Logo";
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -47,21 +47,7 @@ export function Header() {
     <>
       <header className="fixed top-0 w-full z-50 glass-panel border-b border-custom">
         <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-3 group">
-            {/* تغییر حیاتی: img ساده به جای next/image با fetchpriority="high" */}
-            <img
-              src="/logo.webp"
-              alt="JSDevelop Logo"
-              width={40}
-              height={40}
-              fetchPriority="high"
-              decoding="async"
-              className="rounded-xl"
-            />
-            <span className="text-xl font-bold tracking-tight text-heading">
-              JSDevelop
-            </span>
-          </Link>
+          <Logo size={40} />
 
           <nav
             className="hidden md:flex items-center gap-8 text-sm font-medium"
@@ -115,10 +101,10 @@ export function Header() {
 
       {/* منوی موبایل - CSS خالص (بدون framer-motion) */}
       <div
-        className={`mobile-menu fixed inset-0 z-[60] flex flex-col md:hidden ${
-          isMenuOpen ? "open" : ""
-        }`}
+        className={`mobile-menu fixed inset-0 z-[60] flex flex-col md:hidden ${isMenuOpen ? "open" : ""
+          }`}
         aria-hidden={!isMenuOpen}
+        inert={!isMenuOpen ? "" : undefined}
       >
         {/* Backdrop */}
         <div

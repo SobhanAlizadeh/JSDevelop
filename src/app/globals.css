@@ -293,3 +293,9 @@
 @media (prefers-reduced-motion: reduce) {
   .n8n-edge { animation: none; }
 }
+.mobile-menu:not(.open) .mobile-menu-item,
+.mobile-menu:not(.open) button,
+.mobile-menu:not(.open) a {
+  visibility: hidden;
+  pointer-events: none;
+}

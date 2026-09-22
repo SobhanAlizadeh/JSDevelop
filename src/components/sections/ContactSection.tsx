@@ -130,9 +130,9 @@ export function ContactSection() {
               <Clock className="w-6 h-6 text-primary" />
             </div>
             <div className="text-right">
-              <h4 className="font-bold text-heading text-base md:text-lg">
+              <h3 className="font-bold text-heading text-base md:text-lg">
                 ساعات کاری
-              </h4>
+              </h3>
               <p className="text-muted-custom text-sm">
                 شنبه تا پنجشنبه، ۹ صبح تا ۶ عصر
               </p>
@@ -146,9 +146,9 @@ export function ContactSection() {
               <MessageCircle className="w-6 h-6 text-secondary" />
             </div>
             <div className="text-right">
-              <h4 className="font-bold text-heading text-base md:text-lg">
+              <h3 className="font-bold text-heading text-base md:text-lg">
                 پاسخگویی سریع
-              </h4>
+              </h3>
               <p className="text-muted-custom text-sm">
                 کمتر از ۲ ساعت در روزهای کاری
               </p>

@@ -2,19 +2,14 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { siteConfig } from "@/lib/metadata";
-
+import { Logo } from "@/components/ui/Logo";
 export function Footer() {
   return (
     <footer className="relative z-10 py-12 md:py-16 border-t border-white/5 bg-dark text-slate-400">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-12">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-lg">
-                JS
-              </div>
-              <span className="text-2xl font-bold text-white">JSDevelop</span>
-            </div>
+           <Logo size={40} />
             <p className="leading-relaxed max-w-sm mb-6 text-sm md:text-base">
               ما با استراتژی‌های پیشرفته بازاریابی دیجیتال و راهکارهای توسعه
               کسب‌وکار، رشد شما را تسریع می‌کنیم.

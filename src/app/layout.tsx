@@ -85,13 +85,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
-        <link
-          rel="preload"
-          href="/_next/static/media/ec8f59eafded4799-s.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+      
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -106,8 +100,13 @@ export default function RootLayout({
         />
       </head>
 
-      <body className={`${vazir.className} antialiased selection:bg-primary selection:text-white`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+<body
+  className={`${vazir.className} antialiased selection:bg-primary selection:text-white`}
+  style={{
+    backgroundColor: "#030712",
+    color: "#f8fafc",
+  }}
+>        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:z-50 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
