@@ -271,3 +271,25 @@
 .mobile-menu.open .mobile-menu-item:nth-child(3) { transition-delay: 0.26s; }
 .mobile-menu.open .mobile-menu-item:nth-child(4) { transition-delay: 0.34s; }
 .mobile-menu.open .mobile-menu-item:nth-child(5) { transition-delay: 0.42s; }
+
+/* ============================================
+   بوم نمایشگر n8n
+   ============================================ */
+.n8n-canvas {
+  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* جریان داده روی خطوط اتصال */
+@keyframes dashFlow {
+  to { stroke-dashoffset: -24; }
+}
+
+.n8n-edge {
+  stroke-dasharray: 6 6;
+  animation: dashFlow 1.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .n8n-edge { animation: none; }
+}

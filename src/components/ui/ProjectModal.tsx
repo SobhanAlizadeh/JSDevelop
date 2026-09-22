@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { X, ExternalLink, ArrowLeft } from "lucide-react";
+import { X, ExternalLink, ArrowLeft, Workflow } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { N8nShowcase } from "./N8nShowcase";
+import type { N8nWorkflow } from "@/lib/n8n-workflows";
 
 interface Project {
   name: string;
@@ -17,21 +19,28 @@ interface ProjectModalProps {
   onClose: () => void;
   serviceTitle: string;
   projects: Project[];
+  workflows?: N8nWorkflow[];
 }
 
-export function ProjectModal({ isOpen, onClose, serviceTitle, projects }: ProjectModalProps) {
+export function ProjectModal({
+  isOpen,
+  onClose,
+  serviceTitle,
+  projects,
+  workflows,
+}: ProjectModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   // قفل اسکرول body و بستن با ESC
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      
+
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === "Escape") onClose();
       };
       window.addEventListener("keydown", handleEscape);
-      
+
       return () => {
         document.body.style.overflow = "";
         window.removeEventListener("keydown", handleEscape);
@@ -45,6 +54,13 @@ export function ProjectModal({ isOpen, onClose, serviceTitle, projects }: Projec
       onClose();
     }
   };
+
+  // بررسی اینکه آیا پروژه‌ها فقط placeholder هستند (مثل n8n)
+  const hasRealProjects =
+    projects.length > 0 &&
+    !(projects.length === 1 && (projects[0].link === "/" || projects[0].link === "#"));
+
+  const hasWorkflows = workflows && workflows.length > 0;
 
   return (
     <AnimatePresence>
@@ -83,7 +99,11 @@ export function ProjectModal({ isOpen, onClose, serviceTitle, projects }: Projec
                     {serviceTitle}
                   </h2>
                   <p className="text-xs md:text-sm text-muted-custom">
-                    نمونه‌کارهای مرتبط با این خدمت
+                    {hasWorkflows && hasRealProjects
+                      ? "نمونه‌کارها و گردش‌کارهای اجرایی"
+                      : hasWorkflows
+                      ? "گردش‌کارهای اجرایی"
+                      : "نمونه‌کارهای مرتبط با این خدمت"}
                   </p>
                 </div>
               </div>
@@ -98,83 +118,91 @@ export function ProjectModal({ isOpen, onClose, serviceTitle, projects }: Projec
             </div>
 
             {/* بدنه مودال - قابل اسکرول */}
-            <div className="overflow-y-auto max-h-[calc(90vh-100px)] p-5 md:p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                {projects.map((project, index) => (
-                  <motion.div
-                    key={project.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                  >
-                    {project.link === "#" ? (
-                      <div className="group block glass-panel rounded-xl overflow-hidden cursor-not-allowed opacity-50">
-                        <div className="relative w-full aspect-video bg-muted overflow-hidden">
-                          <Image
-                            src={project.image}
-                            alt={project.name}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            loading="lazy"
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="p-4">
-                          <h3 className="text-base md:text-lg font-bold text-heading">
-                            {project.name}
-                          </h3>
-                          <span className="inline-flex items-center gap-1 text-xs text-muted-custom mt-2">
-                            در حال ساخت
-                          </span>
-                        </div>
-                      </div>
-                    ) : ( 
-                    <Link
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group block glass-panel rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
-                    >
-                      {/* کانتینر تصویر با aspect-ratio ثابت برای جلوگیری از CLS */}
-                      <div className="relative w-full aspect-video bg-muted overflow-hidden">
-                        <Image
-                          src={project.image}
-                          alt={project.name}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          loading="lazy"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        {/* Overlay هنگام hover */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary text-white text-xs font-semibold">
-                            مشاهده پروژه
-                            <ExternalLink className="w-3 h-3" />
-                          </span>
-                        </div>
-                      </div>
+            <div className="overflow-y-auto max-h-[calc(90vh-100px)] p-5 md:p-8 space-y-8">
+              {/* ═══════════════════════════════════════════
+                  ویترین n8n (فقط اگر workflows وجود داشت)
+                 ═══════════════════════════════════════════ */}
+              {hasWorkflows && (
+                <div className={hasRealProjects ? "pb-8 border-b border-custom" : ""}>
+                  <h3 className="text-base md:text-lg font-bold text-heading mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <Workflow size={16} className="text-primary" />
+                    </span>
+                    نمونه گردش‌کارهای اجرایی
+                  </h3>
+                  <N8nShowcase workflows={workflows!} />
+                </div>
+              )}
 
-                      {/* اطلاعات پروژه */}
-                      <div className="p-4">
-                        <h3 className="text-base md:text-lg font-bold text-heading group-hover:text-primary transition-colors">
-                          {project.name}
-                        </h3>
-                        <span className="inline-flex items-center gap-1 text-xs text-muted-custom mt-2 group-hover:text-primary transition-colors">
-                          مشاهده جزئیات
-                          <ExternalLink className="w-3 h-3" />
-                        </span>
-                      </div>
-                    </Link>
-                     )}
-                  </motion.div>
-                  
-                ))}
-              </div>
+              {/* ═══════════════════════════════════════════
+                  گرید پروژه‌ها (فقط اگر پروژه واقعی وجود داشت)
+                 ═══════════════════════════════════════════ */}
+              {hasRealProjects && (
+                <div>
+                  <h3 className="text-base md:text-lg font-bold text-heading mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+                      <ExternalLink size={16} className="text-secondary" />
+                    </span>
+                    پروژه‌های انجام‌شده
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    {projects.map((project, index) => (
+                      <motion.div
+                        key={project.name}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.08 }}
+                      >
+                        <Link
+                          href={project.link}
+                          target={project.link.startsWith("http") ? "_blank" : undefined}
+                          rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                          className="group block glass-panel rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
+                        >
+                          {/* کانتینر تصویر با aspect-ratio ثابت برای جلوگیری از CLS */}
+                          <div className="relative w-full aspect-video bg-muted overflow-hidden">
+                            <Image
+                              src={project.image}
+                              alt={project.name}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              loading="lazy"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            {/* Overlay هنگام hover */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary text-white text-xs font-semibold">
+                                مشاهده پروژه
+                                <ExternalLink className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </div>
 
-              {/* CTA پایین مودال */}
-              <div className="mt-8 pt-6 border-t border-custom text-center">
+                          {/* اطلاعات پروژه */}
+                          <div className="p-4">
+                            <h4 className="text-base md:text-lg font-bold text-heading group-hover:text-primary transition-colors">
+                              {project.name}
+                            </h4>
+                            <span className="inline-flex items-center gap-1 text-xs text-muted-custom mt-2 group-hover:text-primary transition-colors">
+                              مشاهده جزئیات
+                              <ExternalLink className="w-3 h-3" />
+                            </span>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════════════════════════════════
+                  CTA پایین مودال
+                 ═══════════════════════════════════════════ */}
+              <div className="pt-6 border-t border-custom text-center">
                 <p className="text-muted-custom text-sm mb-4">
-                  پروژه مشابهی مد نظرتان است؟
+                  {hasWorkflows
+                    ? "نیاز به اتوماسیون مشابهی دارید؟"
+                    : "پروژه مشابهی مد نظرتان است؟"}
                 </p>
                 <Link
                   href="#contact"

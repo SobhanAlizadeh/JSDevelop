@@ -28,16 +28,15 @@ export function ServiceCard({
   onViewProjects,
 }: ServiceCardProps) {
   const IconComponent = getIcon(icon);
-  const hasProjects = relatedProjects && relatedProjects.length > 0;
 
   return (
     <div className="group glass-panel p-5 md:p-6 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 flex flex-col">
-      {/* آیکون */}
+      {/* آیکون خدمت */}
       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
         {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
       </div>
 
-      {/* محتوا */}
+      {/* عنوان و توضیح */}
       <h3 className="text-base md:text-lg font-bold mb-2 text-heading">{title}</h3>
       <p className="text-xs md:text-sm text-muted-custom leading-relaxed mb-4 flex-1">
         {description}
@@ -52,14 +51,14 @@ export function ServiceCard({
         <ArrowLeft className="w-4 h-4" />
       </Link>
 
-      {/* دکمه مشاهده نمونه‌کارها (فقط اگر پروژه وجود دارد) */}
-      {hasProjects && onViewProjects && (
+      {/* دکمه مشاهده نمونه‌کارها */}
+      {onViewProjects && (
         <button
           onClick={onViewProjects}
           className="mt-2 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-xs md:text-sm font-semibold transition-all border border-primary/20 hover:border-primary/40"
         >
           <Sparkles className="w-4 h-4" />
-          مشاهده نمونه‌کارها ({relatedProjects.length})
+          مشاهده نمونه‌کارها
         </button>
       )}
     </div>
