@@ -9,7 +9,7 @@ export const siteConfig = {
   locale: "fa_IR",
   twitter: "@jsdevelop",
   email: "customers@jsdevelop.ir",
-  phone: "+989102452312",
+  phone: "+989229033102",
   address: "تهران، خیابان شریعتی، میرداماد، پلاک ۹۱۱",
   founded: "2009",
 };
