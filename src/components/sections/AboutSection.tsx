@@ -44,9 +44,9 @@ export function AboutSection() {
                 👨‍💻
               </div>
               <div>
-                <h4 className="font-bold text-heading text-base md:text-lg">
+                <h3 className="font-bold text-heading text-base md:text-lg">
                   طیب علیزاده
-                </h4>
+                </h3>
                 <p className="text-primary text-sm">بنیان‌گذار و مهندس سئو</p>
               </div>
             </div>

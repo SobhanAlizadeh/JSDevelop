@@ -65,7 +65,7 @@ const websiteSchema = {
 };
 const vazir = Vazirmatn({
   subsets: ["arabic"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-vazir",
   display: "swap", // این خط حیاتی است: متن فوراً نمایش داده می‌شود، فونت بعداً لود می‌شود
   preload: true,
