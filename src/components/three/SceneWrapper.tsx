@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-
+import { Suspense } from "react";
 const Scene3D = dynamic(
   () => import("@/components/three/Scene3D").then((mod) => mod.Scene3D),
   {
@@ -17,8 +17,10 @@ const Scene3D = dynamic(
 
 export function SceneWrapper() {
   return (
+     <Suspense fallback={null}>
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
       <Scene3D />
     </div>
+    </Suspense>
   );
 }
