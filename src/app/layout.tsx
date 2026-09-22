@@ -7,13 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
 // فونت فارسی
-const vazir = Vazirmatn({
-  subsets: ["arabic"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-vazir",
-  display: "swap",
-  preload: true,
-});
+
 
 // فونت انگلیسی برای شرکا
 const spaceGrotesk = Space_Grotesk({
@@ -21,6 +15,7 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
+  preload: true, // این خط حیاتی است: متن فوراً نمایش داده می‌شود، فونت بعداً لود می‌شود
 });
 
 export const metadata: Metadata = {
@@ -68,7 +63,13 @@ const websiteSchema = {
   name: siteConfig.name,
   url: siteConfig.url,
 };
-
+const vazir = Vazirmatn({
+  subsets: ["arabic"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-vazir",
+  display: "swap", // این خط حیاتی است: متن فوراً نمایش داده می‌شود، فونت بعداً لود می‌شود
+  preload: true,
+});
 export default function RootLayout({
   children,
 }: {

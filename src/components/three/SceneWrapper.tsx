@@ -7,7 +7,8 @@ const Scene3D = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="fixed inset-0 z-0 flex items-center justify-center overflow-hidden bg-background">
+      <div className="fixed inset-0 z-0 flex items-center justify-center bg-dark">
+        {/* یک لودینگ بسیار سبک فقط برای جلوگیری از پرش صفحه */}
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
       </div>
     ),
