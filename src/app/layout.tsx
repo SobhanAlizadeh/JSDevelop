@@ -65,10 +65,11 @@ const websiteSchema = {
 };
 const vazir = Vazirmatn({
   subsets: ["arabic"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"], // وزن‌های غیرضروری حذف شدند تا حجم فونت کمتر شود
   variable: "--font-vazir",
-  display: "swap", // این خط حیاتی است: متن فوراً نمایش داده می‌شود، فونت بعداً لود می‌شود
+  display: "swap",
   preload: true,
+  adjustFontFallback: false, // این خط باعث می‌شود مرورگر سریع‌تر فونت را جایگزین کند
 });
 export default function RootLayout({
   children,
