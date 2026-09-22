@@ -393,4 +393,377 @@ export const n8nWorkflows: N8nWorkflow[] = [
   ]
 }`,
   },
+  // ═══════════════════════════════════════════
+  // ۹. استخدام و زمان‌بندی مصاحبه با AI
+  // ═══════════════════════════════════════════
+  {
+    id: "recruitment-ai",
+    title: "استخدام و زمان‌بندی مصاحبه با AI",
+    description:
+      "رزومه‌های ارسالی از فرم استخدام به‌صورت خودکار با AI تحلیل و امتیازدهی می‌شوند. کاندیداهای واجد شرایط در Google Calendar زمان‌بندی شده و ایمیل دعوت به مصاحبه ارسال می‌گردد.",
+    tags: ["Webhook", "OpenAI", "Google Calendar", "Gmail", "Airtable"],
+    nodes: [
+      { name: "Resume Webhook", type: "n8n-nodes-base.webhook", position: [40, 140], params: "POST /apply" },
+      { name: "Extract Resume Text", type: "n8n-nodes-base.extractFromFile", position: [240, 140], params: "PDF → متن" },
+      { name: "AI Score Candidate", type: "@n8n/n8n-nodes-langchain.chainLlm", position: [440, 140], params: "GPT-4o امتیازدهی" },
+      { name: "Save to Airtable", type: "n8n-nodes-base.airtable", position: [640, 140], params: "پایگاه کاندیداها" },
+      { name: "Qualified?", type: "n8n-nodes-base.if", position: [840, 140], params: "امتیاز > ۷۰" },
+      { name: "Book Interview", type: "n8n-nodes-base.googleCalendar", position: [1040, 140], params: "ایجاد رویداد" },
+      { name: "Send Invite Email", type: "n8n-nodes-base.gmail", position: [1240, 140], params: "دعوت به مصاحبه" },
+    ],
+    connections: [
+      { from: "Resume Webhook", to: "Extract Resume Text" },
+      { from: "Extract Resume Text", to: "AI Score Candidate" },
+      { from: "AI Score Candidate", to: "Save to Airtable" },
+      { from: "Save to Airtable", to: "Qualified?" },
+      { from: "Qualified?", to: "Book Interview" },
+      { from: "Book Interview", to: "Send Invite Email" },
+    ],
+    json: `{
+  "name": "AI Recruitment & Interview Scheduling",
+  "nodes": [
+    { "name": "Resume Webhook", "type": "n8n-nodes-base.webhook",
+      "parameters": { "path": "apply", "httpMethod": "POST" } },
+    { "name": "Extract Resume Text", "type": "n8n-nodes-base.extractFromFile",
+      "parameters": { "operation": "text" } },
+    { "name": "AI Score Candidate", "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "parameters": { "model": "gpt-4o", "prompt": "Score resume against job requirements 0-100" } },
+    { "name": "Save to Airtable", "type": "n8n-nodes-base.airtable",
+      "parameters": { "operation": "create", "table": "Candidates" } },
+    { "name": "Qualified?", "type": "n8n-nodes-base.if",
+      "parameters": { "conditions": { "number": [{ "value1": "={{ $json.score }}", "operation": "larger", "value2": 70 }] } } },
+    { "name": "Book Interview", "type": "n8n-nodes-base.googleCalendar",
+      "parameters": { "operation": "create", "calendar": "hiring@company.com" } },
+    { "name": "Send Invite Email", "type": "n8n-nodes-base.gmail",
+      "parameters": { "subject": "دعوت به مصاحبه شغلی" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۰. تیکتینگ پشتیبانی مشتری با AI
+  // ═══════════════════════════════════════════
+  {
+    id: "support-ticketing-ai",
+    title: "تیکتینگ پشتیبانی مشتری با AI",
+    description:
+      "تیکت‌های Zendesk با AI دسته‌بندی و اولویت‌بندی می‌شوند. سوالات ساده مستقیماً پاسخ داده شده و موارد پیچیده به کارشناس مربوطه در Slack ارجاع می‌گردد.",
+    tags: ["Zendesk", "OpenAI", "Slack", "RAG"],
+    nodes: [
+      { name: "Zendesk Trigger", type: "n8n-nodes-base.zendeskTrigger", position: [40, 140], params: "تیکت جدید" },
+      { name: "Classify Ticket", type: "@n8n/n8n-nodes-langchain.chainLlm", position: [240, 140], params: "دسته‌بندی + اولویت" },
+      { name: "Can Auto-Reply?", type: "n8n-nodes-base.if", position: [440, 140], params: "اعتماد بالا" },
+      { name: "AI Draft Reply", type: "@n8n/n8n-nodes-langchain.agent", position: [640, 260], params: "RAG از مستندات" },
+      { name: "Update Ticket", type: "n8n-nodes-base.zendesk", position: [840, 260], params: "پاسخ خودکار" },
+      { name: "Route to Agent", type: "n8n-nodes-base.slack", position: [640, 40], params: "ارجاع به تیم فنی" },
+    ],
+    connections: [
+      { from: "Zendesk Trigger", to: "Classify Ticket" },
+      { from: "Classify Ticket", to: "Can Auto-Reply?" },
+      { from: "Can Auto-Reply?", to: "AI Draft Reply" },
+      { from: "AI Draft Reply", to: "Update Ticket" },
+      { from: "Can Auto-Reply?", to: "Route to Agent" },
+    ],
+    json: `{
+  "name": "AI Customer Support Ticketing",
+  "nodes": [
+    { "name": "Zendesk Trigger", "type": "n8n-nodes-base.zendeskTrigger",
+      "parameters": { "event": "ticket.created" } },
+    { "name": "Classify Ticket", "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "parameters": { "model": "gpt-4o-mini", "prompt": "Classify category, priority, confidence" } },
+    { "name": "Can Auto-Reply?", "type": "n8n-nodes-base.if",
+      "parameters": { "conditions": { "number": [{ "value1": "={{ $json.confidence }}", "operation": "larger", "value2": 0.85 }] } } },
+    { "name": "AI Draft Reply", "type": "@n8n/n8n-nodes-langchain.agent",
+      "parameters": { "model": "gpt-4o", "tools": ["knowledge_base_search"] } },
+    { "name": "Update Ticket", "type": "n8n-nodes-base.zendesk",
+      "parameters": { "operation": "update", "comment": "={{ $json.reply }}" } },
+    { "name": "Route to Agent", "type": "n8n-nodes-base.slack",
+      "parameters": { "channel": "#support-escalation" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۱. تطبیق فاکتور و حسابداری خودکار
+  // ═══════════════════════════════════════════
+  {
+    id: "invoice-reconciliation",
+    title: "تطبیق فاکتور و حسابداری خودکار",
+    description:
+      "فاکتورهای دریافتی از ایمیل استخراج، اطلاعات کلیدی با AI خوانده شده و با سفارش خرید در سیستم حسابداری تطبیق داده می‌شود. مغایرت‌ها به تیم مالی گزارش می‌گردد.",
+    tags: ["Gmail", "OpenAI", "QuickBooks", "Google Sheets"],
+    nodes: [
+      { name: "Gmail Trigger", type: "n8n-nodes-base.gmailTrigger", position: [40, 140], params: "ایمیل با پیوست PDF" },
+      { name: "Extract Invoice Data", type: "@n8n/n8n-nodes-langchain.agent", position: [240, 140], params: "OCR + AI استخراج" },
+      { name: "Fetch PO", type: "n8n-nodes-base.quickbooks", position: [440, 140], params: "سفارش خرید مرتبط" },
+      { name: "Match Amounts", type: "n8n-nodes-base.code", position: [640, 140], params: "مقایسه مبالغ" },
+      { name: "Mismatch?", type: "n8n-nodes-base.if", position: [840, 140], params: "اختلاف > ۰" },
+      { name: "Create Bill", type: "n8n-nodes-base.quickbooks", position: [1040, 40], params: "ثبت فاکتور" },
+      { name: "Flag Finance Team", type: "n8n-nodes-base.slack", position: [1040, 260], params: "هشدار مغایرت" },
+    ],
+    connections: [
+      { from: "Gmail Trigger", to: "Extract Invoice Data" },
+      { from: "Extract Invoice Data", to: "Fetch PO" },
+      { from: "Fetch PO", to: "Match Amounts" },
+      { from: "Match Amounts", to: "Mismatch?" },
+      { from: "Mismatch?", to: "Create Bill" },
+      { from: "Mismatch?", to: "Flag Finance Team" },
+    ],
+    json: `{
+  "name": "Invoice Reconciliation Automation",
+  "nodes": [
+    { "name": "Gmail Trigger", "type": "n8n-nodes-base.gmailTrigger",
+      "parameters": { "filters": { "hasAttachment": true } } },
+    { "name": "Extract Invoice Data", "type": "@n8n/n8n-nodes-langchain.agent",
+      "parameters": { "model": "gpt-4o", "tools": ["pdf_ocr"] } },
+    { "name": "Fetch PO", "type": "n8n-nodes-base.quickbooks",
+      "parameters": { "resource": "purchaseOrder", "operation": "get" } },
+    { "name": "Match Amounts", "type": "n8n-nodes-base.code",
+      "parameters": { "jsCode": "return [{ json: { diff: invoiceTotal - poTotal } }];" } },
+    { "name": "Mismatch?", "type": "n8n-nodes-base.if",
+      "parameters": { "conditions": { "number": [{ "value1": "={{ $json.diff }}", "operation": "notEqual", "value2": 0 }] } } },
+    { "name": "Create Bill", "type": "n8n-nodes-base.quickbooks",
+      "parameters": { "resource": "bill", "operation": "create" } },
+    { "name": "Flag Finance Team", "type": "n8n-nodes-base.slack",
+      "parameters": { "channel": "#finance-alerts" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۲. هشدار موجودی انبار
+  // ═══════════════════════════════════════════
+  {
+    id: "inventory-alert",
+    title: "هشدار و سفارش خودکار موجودی انبار",
+    description:
+      "موجودی محصولات هر ساعت از سیستم انبار بررسی می‌شود. در صورت رسیدن به آستانه بحرانی، سفارش خرید خودکار به تأمین‌کننده ارسال و تیم انبارداری مطلع می‌شود.",
+    tags: ["Schedule", "PostgreSQL", "Slack", "Gmail"],
+    nodes: [
+      { name: "Hourly Check", type: "n8n-nodes-base.scheduleTrigger", position: [40, 140], params: "هر ۱ ساعت" },
+      { name: "Query Stock", type: "n8n-nodes-base.postgres", position: [240, 140], params: "SELECT کالاهای کم‌موجود" },
+      { name: "Low Stock?", type: "n8n-nodes-base.if", position: [440, 140], params: "موجودی < حداقل" },
+      { name: "Generate PO", type: "n8n-nodes-base.code", position: [640, 140], params: "محاسبه مقدار سفارش" },
+      { name: "Email Supplier", type: "n8n-nodes-base.gmail", position: [840, 140], params: "سفارش خرید" },
+      { name: "Notify Warehouse", type: "n8n-nodes-base.slack", position: [1040, 140], params: "#انبار" },
+    ],
+    connections: [
+      { from: "Hourly Check", to: "Query Stock" },
+      { from: "Query Stock", to: "Low Stock?" },
+      { from: "Low Stock?", to: "Generate PO" },
+      { from: "Generate PO", to: "Email Supplier" },
+      { from: "Email Supplier", to: "Notify Warehouse" },
+    ],
+    json: `{
+  "name": "Inventory Stock Alert & Reorder",
+  "nodes": [
+    { "name": "Hourly Check", "type": "n8n-nodes-base.scheduleTrigger",
+      "parameters": { "rule": { "interval": [{ "field": "hours" }] } } },
+    { "name": "Query Stock", "type": "n8n-nodes-base.postgres",
+      "parameters": { "query": "SELECT * FROM inventory WHERE qty < min_threshold" } },
+    { "name": "Low Stock?", "type": "n8n-nodes-base.if",
+      "parameters": { "conditions": { "number": [{ "value1": "={{ $json.qty }}", "operation": "smaller", "value2": "={{ $json.min_threshold }}" }] } } },
+    { "name": "Generate PO", "type": "n8n-nodes-base.code",
+      "parameters": { "jsCode": "return [{ json: { orderQty: item.max_threshold - item.qty } }];" } },
+    { "name": "Email Supplier", "type": "n8n-nodes-base.gmail",
+      "parameters": { "subject": "سفارش خرید جدید - {{ $json.sku }}" } },
+    { "name": "Notify Warehouse", "type": "n8n-nodes-base.slack",
+      "parameters": { "channel": "#warehouse" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۳. ثبت‌نام و یادآوری وبینار
+  // ═══════════════════════════════════════════
+  {
+    id: "webinar-registration",
+    title: "ثبت‌نام و یادآوری وبینار",
+    description:
+      "ثبت‌نام‌کنندگان وبینار در Zoom و Google Sheets ذخیره می‌شوند. یک روز قبل و یک ساعت قبل از رویداد، یادآوری خودکار از طریق ایمیل و پیامک ارسال می‌گردد.",
+    tags: ["Zoom", "Google Sheets", "Gmail", "SMS", "Wait"],
+    nodes: [
+      { name: "Registration Webhook", type: "n8n-nodes-base.webhook", position: [40, 140], params: "POST /register" },
+      { name: "Create Zoom Reg", type: "n8n-nodes-base.zoom", position: [240, 140], params: "ثبت‌نام Zoom" },
+      { name: "Log to Sheets", type: "n8n-nodes-base.googleSheets", position: [440, 140], params: "لیست شرکت‌کنندگان" },
+      { name: "Confirm Email", type: "n8n-nodes-base.gmail", position: [640, 140], params: "تایید ثبت‌نام" },
+      { name: "Wait Until 1 Day Before", type: "n8n-nodes-base.wait", position: [840, 140], params: "زمان‌بندی" },
+      { name: "Reminder Email", type: "n8n-nodes-base.gmail", position: [1040, 140], params: "یادآوری ۲۴ ساعته" },
+      { name: "Wait Until 1 Hour Before", type: "n8n-nodes-base.wait", position: [1240, 140], params: "زمان‌بندی" },
+      { name: "Reminder SMS", type: "n8n-nodes-base.httpRequest", position: [1440, 140], params: "Kavenegar API" },
+    ],
+    connections: [
+      { from: "Registration Webhook", to: "Create Zoom Reg" },
+      { from: "Create Zoom Reg", to: "Log to Sheets" },
+      { from: "Log to Sheets", to: "Confirm Email" },
+      { from: "Confirm Email", to: "Wait Until 1 Day Before" },
+      { from: "Wait Until 1 Day Before", to: "Reminder Email" },
+      { from: "Reminder Email", to: "Wait Until 1 Hour Before" },
+      { from: "Wait Until 1 Hour Before", to: "Reminder SMS" },
+    ],
+    json: `{
+  "name": "Webinar Registration & Reminders",
+  "nodes": [
+    { "name": "Registration Webhook", "type": "n8n-nodes-base.webhook",
+      "parameters": { "path": "register", "httpMethod": "POST" } },
+    { "name": "Create Zoom Reg", "type": "n8n-nodes-base.zoom",
+      "parameters": { "resource": "meetingRegistrant", "operation": "create" } },
+    { "name": "Log to Sheets", "type": "n8n-nodes-base.googleSheets",
+      "parameters": { "operation": "append", "sheetId": "webinar-attendees" } },
+    { "name": "Confirm Email", "type": "n8n-nodes-base.gmail",
+      "parameters": { "subject": "ثبت‌نام شما تایید شد ✅" } },
+    { "name": "Wait Until 1 Day Before", "type": "n8n-nodes-base.wait",
+      "parameters": { "resume": "specificTime", "dateTime": "={{ $json.eventDate }} -1d" } },
+    { "name": "Reminder Email", "type": "n8n-nodes-base.gmail",
+      "parameters": { "subject": "فردا وبینار شما برگزار می‌شود" } },
+    { "name": "Wait Until 1 Hour Before", "type": "n8n-nodes-base.wait",
+      "parameters": { "resume": "specificTime", "dateTime": "={{ $json.eventDate }} -1h" } },
+    { "name": "Reminder SMS", "type": "n8n-nodes-base.httpRequest",
+      "parameters": { "url": "https://api.kavenegar.com/v1/sms/send.json" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۴. تایید هزینه و بازپرداخت کارکنان
+  // ═══════════════════════════════════════════
+  {
+    id: "expense-approval",
+    title: "تایید هزینه و بازپرداخت کارکنان",
+    description:
+      "درخواست‌های هزینه از فرم داخلی ثبت می‌شود. بر اساس مبلغ، مسیر تایید متفاوتی طی می‌شود و پس از تصویب، اطلاعات به سیستم حسابداری و فیش حقوقی ارسال می‌گردد.",
+    tags: ["Webhook", "Slack", "Airtable", "QuickBooks"],
+    nodes: [
+      { name: "Expense Form", type: "n8n-nodes-base.webhook", position: [40, 140], params: "POST /expense" },
+      { name: "Log Request", type: "n8n-nodes-base.airtable", position: [240, 140], params: "ثبت درخواست" },
+      { name: "Amount Check", type: "n8n-nodes-base.switch", position: [440, 140], params: "زیر / بالای ۵۰۰ دلار" },
+      { name: "Manager Approval", type: "n8n-nodes-base.slack", position: [640, 60], params: "تایید مدیر مستقیم" },
+      { name: "Finance Approval", type: "n8n-nodes-base.slack", position: [640, 220], params: "تایید مدیر مالی" },
+      { name: "Update Status", type: "n8n-nodes-base.airtable", position: [860, 140], params: "به‌روزرسانی وضعیت" },
+      { name: "Push to QuickBooks", type: "n8n-nodes-base.quickbooks", position: [1060, 140], params: "ثبت بازپرداخت" },
+    ],
+    connections: [
+      { from: "Expense Form", to: "Log Request" },
+      { from: "Log Request", to: "Amount Check" },
+      { from: "Amount Check", to: "Manager Approval" },
+      { from: "Amount Check", to: "Finance Approval" },
+      { from: "Manager Approval", to: "Update Status" },
+      { from: "Finance Approval", to: "Update Status" },
+      { from: "Update Status", to: "Push to QuickBooks" },
+    ],
+    json: `{
+  "name": "Employee Expense Approval",
+  "nodes": [
+    { "name": "Expense Form", "type": "n8n-nodes-base.webhook",
+      "parameters": { "path": "expense", "httpMethod": "POST" } },
+    { "name": "Log Request", "type": "n8n-nodes-base.airtable",
+      "parameters": { "operation": "create", "table": "Expenses" } },
+    { "name": "Amount Check", "type": "n8n-nodes-base.switch",
+      "parameters": { "rules": ["under500", "over500"] } },
+    { "name": "Manager Approval", "type": "n8n-nodes-base.slack",
+      "parameters": { "blocksUi": "Approve / Reject", "channel": "={{ $json.manager }}" } },
+    { "name": "Finance Approval", "type": "n8n-nodes-base.slack",
+      "parameters": { "blocksUi": "Approve / Reject", "channel": "#finance" } },
+    { "name": "Update Status", "type": "n8n-nodes-base.airtable",
+      "parameters": { "operation": "update", "table": "Expenses" } },
+    { "name": "Push to QuickBooks", "type": "n8n-nodes-base.quickbooks",
+      "parameters": { "resource": "reimbursement", "operation": "create" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۵. رزرو نوبت و مدیریت تقویم
+  // ═══════════════════════════════════════════
+  {
+    id: "appointment-booking",
+    title: "رزرو نوبت هوشمند با تقویم",
+    description:
+      "مشتری از طریق چت‌بات تلگرام یا فرم سایت درخواست نوبت می‌دهد، AI زمان‌های خالی تقویم را بررسی و بهترین گزینه را پیشنهاد می‌کند. پس از تایید، رویداد ساخته و یادآوری ارسال می‌شود.",
+    tags: ["Telegram", "Google Calendar", "OpenAI", "SMS"],
+    nodes: [
+      { name: "Telegram Trigger", type: "n8n-nodes-base.telegramTrigger", position: [40, 140], params: "درخواست نوبت" },
+      { name: "Booking Agent", type: "@n8n/n8n-nodes-langchain.agent", position: [240, 140], params: "تشخیص زمان مدنظر" },
+      { name: "Check Availability", type: "n8n-nodes-base.googleCalendar", position: [440, 140], params: "جستجوی زمان خالی" },
+      { name: "Propose Slots", type: "n8n-nodes-base.telegram", position: [640, 140], params: "پیشنهاد ۳ زمان" },
+      { name: "Customer Confirms", type: "n8n-nodes-base.telegramTrigger", position: [840, 140], params: "انتخاب کاربر" },
+      { name: "Create Event", type: "n8n-nodes-base.googleCalendar", position: [1040, 140], params: "ثبت نوبت" },
+      { name: "Send Reminder SMS", type: "n8n-nodes-base.httpRequest", position: [1240, 140], params: "یک ساعت قبل" },
+    ],
+    connections: [
+      { from: "Telegram Trigger", to: "Booking Agent" },
+      { from: "Booking Agent", to: "Check Availability" },
+      { from: "Check Availability", to: "Propose Slots" },
+      { from: "Propose Slots", to: "Customer Confirms" },
+      { from: "Customer Confirms", to: "Create Event" },
+      { from: "Create Event", to: "Send Reminder SMS" },
+    ],
+    json: `{
+  "name": "Smart Appointment Booking",
+  "nodes": [
+    { "name": "Telegram Trigger", "type": "n8n-nodes-base.telegramTrigger",
+      "parameters": { "updates": ["message"] } },
+    { "name": "Booking Agent", "type": "@n8n/n8n-nodes-langchain.agent",
+      "parameters": { "model": "gpt-4o-mini", "systemMessage": "Extract requested date/time and service" } },
+    { "name": "Check Availability", "type": "n8n-nodes-base.googleCalendar",
+      "parameters": { "operation": "getAll", "timeMin": "={{ $json.rangeStart }}" } },
+    { "name": "Propose Slots", "type": "n8n-nodes-base.telegram",
+      "parameters": { "text": "={{ $json.availableSlots }}" } },
+    { "name": "Customer Confirms", "type": "n8n-nodes-base.telegramTrigger",
+      "parameters": { "updates": ["message"] } },
+    { "name": "Create Event", "type": "n8n-nodes-base.googleCalendar",
+      "parameters": { "operation": "create", "start": "={{ $json.chosenSlot }}" } },
+    { "name": "Send Reminder SMS", "type": "n8n-nodes-base.httpRequest",
+      "parameters": { "url": "https://api.kavenegar.com/v1/sms/send.json" } }
+  ]
+}`,
+  },
+
+  // ═══════════════════════════════════════════
+  // ۱۶. مدیریت خودکار نظرات و تعدیل محتوا
+  // ═══════════════════════════════════════════
+  {
+    id: "content-moderation",
+    title: "تعدیل خودکار نظرات و محتوای کاربران",
+    description:
+      "نظرات جدید کاربران در سایت یا اینستاگرام با AI از نظر توهین، اسپم و محتوای نامناسب بررسی می‌شوند. موارد مشکوک پنهان و برای بازبینی انسانی در Slack ارسال می‌گردند.",
+    tags: ["Webhook", "OpenAI", "Slack", "Airtable"],
+    nodes: [
+      { name: "Comment Webhook", type: "n8n-nodes-base.webhook", position: [40, 140], params: "POST /comment" },
+      { name: "AI Moderation Check", type: "n8n-nodes-base.openAi", position: [240, 140], params: "Moderation API" },
+      { name: "Is Flagged?", type: "n8n-nodes-base.if", position: [440, 140], params: "محتوای نامناسب" },
+      { name: "Hide Comment", type: "n8n-nodes-base.httpRequest", position: [640, 40], params: "مخفی کردن نظر" },
+      { name: "Log for Review", type: "n8n-nodes-base.airtable", position: [840, 40], params: "ثبت جهت بازبینی" },
+      { name: "Alert Moderator", type: "n8n-nodes-base.slack", position: [1040, 40], params: "#moderation" },
+      { name: "Publish Comment", type: "n8n-nodes-base.httpRequest", position: [640, 240], params: "انتشار نظر" },
+    ],
+    connections: [
+      { from: "Comment Webhook", to: "AI Moderation Check" },
+      { from: "AI Moderation Check", to: "Is Flagged?" },
+      { from: "Is Flagged?", to: "Hide Comment" },
+      { from: "Hide Comment", to: "Log for Review" },
+      { from: "Log for Review", to: "Alert Moderator" },
+      { from: "Is Flagged?", to: "Publish Comment" },
+    ],
+    json: `{
+  "name": "Automated Content Moderation",
+  "nodes": [
+    { "name": "Comment Webhook", "type": "n8n-nodes-base.webhook",
+      "parameters": { "path": "comment", "httpMethod": "POST" } },
+    { "name": "AI Moderation Check", "type": "n8n-nodes-base.openAi",
+      "parameters": { "resource": "moderation", "operation": "classify" } },
+    { "name": "Is Flagged?", "type": "n8n-nodes-base.if",
+      "parameters": { "conditions": { "boolean": [{ "value1": "={{ $json.flagged }}", "value2": true }] } } },
+    { "name": "Hide Comment", "type": "n8n-nodes-base.httpRequest",
+      "parameters": { "method": "PATCH", "url": "/api/comments/{{ $json.id }}/hide" } },
+    { "name": "Log for Review", "type": "n8n-nodes-base.airtable",
+      "parameters": { "operation": "create", "table": "Flagged Comments" } },
+    { "name": "Alert Moderator", "type": "n8n-nodes-base.slack",
+      "parameters": { "channel": "#moderation" } },
+    { "name": "Publish Comment", "type": "n8n-nodes-base.httpRequest",
+      "parameters": { "method": "PATCH", "url": "/api/comments/{{ $json.id }}/publish" } }
+  ]
+}`,
+  },
+
 ];
