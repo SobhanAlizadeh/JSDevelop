@@ -84,6 +84,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
         <link
           rel="preload"
           href="/_next/static/media/ec8f59eafded4799-s.woff2"

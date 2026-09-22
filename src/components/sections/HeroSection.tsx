@@ -19,7 +19,10 @@ export function HeroSection() {
             </div>
 
             {/* این H1 عنصر LCP است. باید بدون تاخیر JS رندر شود */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight text-heading">
+             <h1
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight text-heading"
+              style={{ contain: "layout style paint" }}
+            >
               حضور دیجیتال کسب‌وکار شما را به{" "}
               <span className="text-gradient">سطحی تازه</span> می‌بریم
             </h1>
