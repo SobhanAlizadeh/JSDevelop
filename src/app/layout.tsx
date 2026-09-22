@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Vazirmatn, Space_Grotesk } from "next/font/google"; // ✅ هر دو فونت در یک خط ایمپورت شدند
 import { ThemeProvider } from "next-themes";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { defaultMetadata, siteConfig } from "@/lib/metadata";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
@@ -121,6 +122,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
