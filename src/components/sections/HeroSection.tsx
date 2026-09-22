@@ -44,7 +44,7 @@ export function HeroSection() {
                 </span>
               </Link>
               <Link
-                href="#portfolio"
+                href="#services"
                 className="px-8 py-4 rounded-xl font-bold border border-custom hover:bg-card-custom transition-all flex items-center justify-center gap-2 text-body"
               >
                 <Briefcase className="w-5 h-5 text-secondary" />
