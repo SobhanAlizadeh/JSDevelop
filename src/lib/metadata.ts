@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "JSDevelop",
   title: "JSDevelop | آژانس دیجیتال و توسعه کسب‌وکار",
   description:
-    "آژانس دیجیتال JSDevelop — سئو، تبلیغات گوگل، طراحی وب‌سایت سه‌بعدی و اتوماسیون با n8n. از سال ۲۰۹ در کنار کسب‌وکارها.",
+    "آژانس دیجیتال JSDevelop — سئو، تبلیغات گوگل، طراحی وب‌سایت سه‌بعدی و اتوماسیون با n8n. از سال ۲۰۰۹ در کنار کسب‌وکارها.",
   url: "https://jsdevelop.ir",
   locale: "fa_IR",
   twitter: "@jsdevelop",

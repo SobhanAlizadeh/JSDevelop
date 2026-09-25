@@ -8,38 +8,50 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 export function Scene3D() {
   const [isMobile, setIsMobile] = useState(false);
+  const [hasWebGL, setHasWebGL] = useState(true); // وضعیت پشتیبانی WebGL
 
   useEffect(() => {
-    // تابعی برای بررسی دقیق و بازگرداندن مقدار boolean
-    const checkIfMobile = () => {
-      const isSmallScreen = window.innerWidth < 768;
-      // استفاده از .test() به جای .match() چون مستقیماً true یا false برمی‌گرداند
-      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      setIsMobile(isSmallScreen || isMobileDevice);
-    };
-
-    // اجرای اولیه
-    checkIfMobile();
-
-    // گوش دادن به تغییر سایز پنجره (برای حالتی که کاربر پنجره مرورگر را کوچک/بزرگ می‌کند)
-    window.addEventListener("resize", checkIfMobile);
-
-    // پاکسازی event listener هنگام unmount شدن کامپوننت
-    return () => window.removeEventListener("resize", checkIfMobile);
+    // تشخیص موبایل
+    setIsMobile(window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    
+    // بررسی پشتیبانی WebGL
+    try {
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      if (!gl) {
+        setHasWebGL(false);
+      }
+    } catch (e) {
+      setHasWebGL(false);
+    }
   }, []);
+
+  // اگر WebGL پشتیبانی نشد، یک پس‌زمینه ساده CSS نمایش دهیم (بدون کرش)
+  if (!hasWebGL) {
+    return (
+      <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 opacity-20 animate-pulse" />
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 75 }}
-        dpr={isMobile ? 1 : [1, 1.5]} // در موبایل فقط 1x render شود
+        dpr={isMobile ? 1 : [1, 1.5]}
         gl={{
-          antialias: !isMobile, // خاموش کردن antialias در موبایل برای سرعت بیشتر
+          antialias: !isMobile,
           alpha: true,
           powerPreference: "high-performance",
         }}
         style={{ width: "100%", height: "100%", display: "block" }}
+        // ⬇️ مدیریت خطای داخلی Three.js
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            console.warn("WebGL Context Lost - Falling back to static background");
+            setHasWebGL(false);
+          });
+        }}
       >
         <Suspense fallback={null}>
           <ambientLight intensity={0.2} />
@@ -49,7 +61,6 @@ export function Scene3D() {
           <TorusKnot isMobile={isMobile} />
           <Particles count={isMobile ? 400 : 1500} isMobile={isMobile} />
 
-          {/* Bloom فقط در دسکتاپ فعال باشد */}
           {!isMobile && (
             <EffectComposer>
               <Bloom intensity={1.2} luminanceThreshold={0.1} luminanceSmoothing={0.4} height={300} />
