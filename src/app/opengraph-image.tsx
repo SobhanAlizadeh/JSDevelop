@@ -1,13 +1,11 @@
 import { ImageResponse } from "next/og";
 
-// ابعاد استاندارد OG Image
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OpengraphImage() {
   return new ImageResponse(
     (
-      // والد اصلی - حتماً flex column باشد
       <div
         style={{
           width: "100%",
@@ -16,24 +14,23 @@ export default function OpengraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#030712", // سرمه‌ای تیره سایت شما
-          fontFamily: "sans-serif", // فونت سیستمی برای جلوگیری از خطای فونت فارسی
+          backgroundColor: "#030712", // سرمه‌ای تیره برند شما
+          fontFamily: "sans-serif", // استفاده از فونت سیستمی ساده
         }}
       >
         {/* ═══════════════════════════════════════
-            بخش لوگو (JS D)
+            لوگوی متنی JSD (بدون پیچیدگی فونت)
             ═══════════════════════════════════════ */}
         <div
           style={{
-            display: "flex", // حیاتی: چون دو span دارد
+            display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontSize: "140px",
             fontWeight: 900,
             letterSpacing: "-5px",
             marginBottom: "30px",
-            // سایه نئونی برای هماهنگی با تم سایت
-            textShadow: "0 0 40px rgba(59, 130, 246, 0.6)", 
+            textShadow: "0 0 40px rgba(59, 130, 246, 0.6)",
           }}
         >
           <span style={{ color: "#ffffff" }}>JS</span>
@@ -55,7 +52,7 @@ export default function OpengraphImage() {
         />
 
         {/* ═══════════════════════════════════════
-            عنوان اصلی
+            عنوان اصلی (انگلیسی برای جلوگیری از خطا)
             ═══════════════════════════════════════ */}
         <h1
           style={{
@@ -65,14 +62,14 @@ export default function OpengraphImage() {
             margin: 0,
             textAlign: "center",
             lineHeight: 1.2,
-            maxWidth: "900px", // محدود کردن عرض برای خوانایی بهتر
+            maxWidth: "900px",
           }}
         >
-          آژانس دیجیتال JSDevelop
+          JSDevelop Digital Agency
         </h1>
 
         {/* ═══════════════════════════════════════
-            توضیحات خدمات
+            توضیحات خدمات (انگلیسی)
             ═══════════════════════════════════════ */}
         <p
           style={{
@@ -84,7 +81,7 @@ export default function OpengraphImage() {
             maxWidth: "800px",
           }}
         >
-          سئو • وب سه‌بعدی • اتوماسیون n8n • تبلیغات گوگل
+          SEO • 3D Web • n8n Automation • Google Ads
         </p>
 
         {/* ═══════════════════════════════════════
@@ -92,7 +89,7 @@ export default function OpengraphImage() {
             ═══════════════════════════════════════ */}
         <div
           style={{
-            display: "flex", // حیاتی: چون یک نقطه و یک متن دارد
+            display: "flex",
             alignItems: "center",
             gap: "12px",
             padding: "12px 24px",
