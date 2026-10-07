@@ -11,7 +11,7 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="relative z-10 py-16 md:py-24 lg:py-32 overflow-hidden"
+      className="relative z-10 section-backdrop py-16 md:py-24 lg:py-32 overflow-hidden"
     >
       <div className="container mx-auto px-4 sm:px-6">
         {/* گرید اصلی درباره ما */}

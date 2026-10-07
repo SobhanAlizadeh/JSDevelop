@@ -201,6 +201,22 @@
 }
 
 /* ============================================
+   پس‌زمینه بخش‌های اصلی (Hero، خدمات، درباره، تماس)
+   پنل نیمه‌شفاف هماهنگ با تم تا متن روی صحنه سه‌بعدی
+   در لایت و دارک کاملاً خوانا باشد
+   ============================================ */
+.section-backdrop {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--card) 58%, transparent) 0%,
+    color-mix(in srgb, var(--card) 78%, transparent) 40%,
+    color-mix(in srgb, var(--card) 82%, transparent) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============================================
    پس‌زمینه صحنه سه‌بعدی — گرادیان هماهنگ با تم
    قبل از mount شدن WebGL و به‌عنوان fallback
    ============================================ */

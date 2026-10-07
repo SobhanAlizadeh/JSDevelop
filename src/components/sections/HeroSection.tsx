@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20">
+    <section className="relative section-backdrop min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           {/* حذف motion.div و استفاده از انیمیشن CSS */}
