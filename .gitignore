@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sandbox workspace artifacts (not part of the source project)
+.zscripts/
+dev.log
+download/
+mini-services/
+skills/
+upload/
+worklog.md
+bun.lock
