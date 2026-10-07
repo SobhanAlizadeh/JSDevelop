@@ -47,7 +47,7 @@ export function N8nShowcase({ workflows }: { workflows: N8nWorkflow[] }) {
           {active.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-medium border border-secondary/20"
+              className="px-2.5 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-semibold border border-secondary/20"
             >
               {tag}
             </span>

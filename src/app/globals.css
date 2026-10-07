@@ -57,8 +57,8 @@
   --font-sans: var(--font-vazir), system-ui, sans-serif;
   --font-latin: var(--font-space-grotesk), system-ui, sans-serif;
 
-  /* انیمیشن fade-up */
-  --animate-fade-up: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* انیمیشن fade-up — fill-mode «both» تا در حالت delay هم قبل از شروع مخفی بماند */
+  --animate-fade-up: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @keyframes fadeUp {
     0% {
@@ -193,27 +193,27 @@
 
 /* ============================================
    سطح بخش‌ها (Stats) — هماهنگ با هر دو تم
+   ⚡️ بدون backdrop-filter: بلور تمام‌عرض روی موبایل‌های ضعیف
+   (و GPU نرم‌افزاری Lighthouse) پرهزینه است و FCP/LCP را عقب می‌برد؛
+   به‌جایش گرادیان تقریباً مات استفاده می‌شود
    ============================================ */
 .section-surface {
-  background-color: color-mix(in srgb, var(--card) 55%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: color-mix(in srgb, var(--card) 60%, transparent);
 }
 
 /* ============================================
    پس‌زمینه بخش‌های اصلی (Hero، خدمات، درباره، تماس)
-   پنل نیمه‌شفاف هماهنگ با تم تا متن روی صحنه سه‌بعدی
-   در لایت و دارک کاملاً خوانا باشد
+   ⚡️ گرادیان نیمه‌شفاف بدون backdrop-filter — بلور تمام‌عرض روی
+   موبایل ضعیف/GPU نرم‌افزاری پرهزینه است؛ شفافیت ساده تقریباً رایگانه
+   و صحنه سه‌بعدی از پشت پنل‌ها می‌درخشد (خوانا در هر دو تم)
    ============================================ */
 .section-backdrop {
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--card) 58%, transparent) 0%,
-    color-mix(in srgb, var(--card) 78%, transparent) 40%,
-    color-mix(in srgb, var(--card) 82%, transparent) 100%
+    color-mix(in srgb, var(--card) 66%, transparent) 0%,
+    color-mix(in srgb, var(--card) 80%, transparent) 40%,
+    color-mix(in srgb, var(--card) 86%, transparent) 100%
   );
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 /* ============================================
@@ -349,4 +349,79 @@
 .mobile-menu:not(.open) a {
   visibility: hidden;
   pointer-events: none;
+}
+
+/* ============================================
+   انیمیشن‌های ظاهرشدن اسکرولی — جایگزین سبک framer-motion
+   فقط opacity و transform (Composited — بدون هزینه Main-Thread)
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================
+   انیمیشن مودال — ورود با CSS خالص (بدون AnimatePresence)
+   ============================================ */
+@keyframes modalBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPanelIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-backdrop-in {
+  animation: modalBackdropIn 0.25s ease-out both;
+}
+
+.modal-panel-in {
+  animation: modalPanelIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.modal-card-in {
+  animation: modalCardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop-in,
+  .modal-panel-in,
+  .modal-card-in {
+    animation: none;
+  }
 }

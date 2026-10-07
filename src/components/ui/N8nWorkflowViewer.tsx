@@ -95,7 +95,7 @@ export function N8nWorkflowViewer({ workflow }: { workflow: N8nWorkflow }) {
                   <Icon size={20} />
                 </span>
               </div>
-              <span className="mt-1.5 text-[11px] font-medium text-muted-custom text-center leading-tight px-1">
+              <span className="mt-1.5 text-[11px] font-semibold text-muted-custom text-center leading-tight px-1">
                 {node.name}
               </span>
             </div>

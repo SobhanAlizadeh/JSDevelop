@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { X, ExternalLink, ArrowLeft, Workflow } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { N8nShowcase } from "./N8nShowcase";
 import type { N8nWorkflow } from "@/lib/n8n-workflows";
 
@@ -62,29 +61,23 @@ export function ProjectModal({
 
   const hasWorkflows = workflows && workflows.length > 0;
 
+  // وقتی مودال بسته است اصلاً رندر نمی‌شود (انیمیشن ورود با CSS خالص انجام می‌شود)
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          ref={modalRef}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          onClick={handleBackdropClick}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-background/80 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-        >
-          {/* محتوای مودال */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden glass-panel rounded-2xl md:rounded-3xl border border-custom shadow-2xl"
-          >
+    // انیمیشن ورود با CSS خالص (modal-backdrop-in / modal-panel-in) — بدون framer-motion
+    <div
+      ref={modalRef}
+      onClick={handleBackdropClick}
+      className="modal-backdrop-in fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-background/80 backdrop-blur-md"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      {/* محتوای مودال */}
+      <div
+        className="modal-panel-in relative w-full max-w-5xl max-h-[90vh] overflow-hidden glass-panel rounded-2xl md:rounded-3xl border border-custom shadow-2xl"
+      >
             {/* هدر مودال */}
             <div className="sticky top-0 z-10 flex items-center justify-between p-5 md:p-6 border-b border-custom bg-background/90 backdrop-blur-md">
               <div className="flex items-center gap-3 min-w-0">
@@ -147,11 +140,10 @@ export function ProjectModal({
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     {projects.map((project, index) => (
-                      <motion.div
+                      <div
                         key={project.name}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.08 }}
+                        className="modal-card-in"
+                        style={{ animationDelay: `${index * 80}ms` }}
                       >
                         <Link
                           href={project.link}
@@ -189,7 +181,7 @@ export function ProjectModal({
                             </span>
                           </div>
                         </Link>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -214,9 +206,7 @@ export function ProjectModal({
                 </Link>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </div>
+        </div>
   );
 }

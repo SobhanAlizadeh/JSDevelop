@@ -3,8 +3,15 @@
 import { useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServiceCard } from "@/components/ui/ServiceCard";
-import { ProjectModal } from "@/components/ui/ProjectModal";
-import { n8nWorkflows, type N8nWorkflow } from "@/lib/n8n-workflows";
+import dynamic from "next/dynamic";
+
+// مودال + ویترین n8n (با دیتای ۷۶۸ خطی) فقط با اولین کلیک دانلود می‌شوند —
+// از باندل اولیه و hydration حذف کامل → TBT کمتر
+const ProjectModal = dynamic(
+  () => import("@/components/ui/ProjectModal").then((mod) => mod.ProjectModal),
+  { ssr: false }
+);
+import type { N8nWorkflow } from "@/lib/n8n-workflows";
 
 interface Project {
   name: string;
@@ -17,7 +24,8 @@ interface Service {
   title: string;
   description: string;
   relatedProjects?: Project[];
-  workflows?: N8nWorkflow[];
+  /** فقط پرچم — دیتای ورک‌فلو با کلیک lazy لود می‌شود */
+  hasWorkflows?: boolean;
 }
 
 const services: Service[] = [
@@ -26,7 +34,7 @@ const services: Service[] = [
     title: "اتوماسیون n8n",
     description:
       "اتصال CRM، ایمیل و بیش از ۴۰۰ اپلیکیشن با ورک‌فلوهای هوشمند و خطای صفر.",
-    workflows: n8nWorkflows, // <-- ویترین تعاملی n8n
+    hasWorkflows: true, // دیتای ویترین با کلیک lazy لود می‌شود (کاهش باندل اولیه)
     // relatedProjects عمداً تعریف نشده تا مودال فقط ورک‌فلوها را نشان دهد
   },
 
@@ -180,6 +188,16 @@ const services: Service[] = [
 
 export function ServicesSection() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  // دیتای ورک‌فلو فقط هنگام باز شدن مودال lazy لود می‌شود
+  const [modalWorkflows, setModalWorkflows] = useState<N8nWorkflow[] | undefined>();
+
+  const openService = (service: Service) => {
+    setModalWorkflows(undefined);
+    setSelectedService(service);
+    if (service.hasWorkflows) {
+      import("@/lib/n8n-workflows").then((m) => setModalWorkflows(m.n8nWorkflows));
+    }
+  };
 
   return (
     <section id="services" className="relative z-10 section-backdrop py-16 md:py-24 lg:py-32">
@@ -200,8 +218,8 @@ export function ServicesSection() {
               index={index}
               relatedProjects={service.relatedProjects}
               onViewProjects={
-                service.relatedProjects?.length || service.workflows?.length
-                  ? () => setSelectedService(service)
+                service.relatedProjects?.length || service.hasWorkflows
+                  ? () => openService(service)
                   : undefined
               }
             />
@@ -209,14 +227,16 @@ export function ServicesSection() {
         </div>
       </div>
 
-      {/* مودال - فقط یک‌بار در DOM رندر می‌شود */}
-      <ProjectModal
-        isOpen={selectedService !== null}
-        onClose={() => setSelectedService(null)}
-        serviceTitle={selectedService?.title || ""}
-        projects={selectedService?.relatedProjects || []}
-        workflows={selectedService?.workflows}
-      />
+      {/* مودال — فقط هنگام انتخاب خدمت mount می‌شود (chunk و دیتا با کلیک لود می‌شوند) */}
+      {selectedService && (!selectedService.hasWorkflows || modalWorkflows) && (
+        <ProjectModal
+          isOpen
+          onClose={() => setSelectedService(null)}
+          serviceTitle={selectedService.title}
+          projects={selectedService.relatedProjects || []}
+          workflows={selectedService.hasWorkflows ? modalWorkflows : undefined}
+        />
+      )}
     </section>
   );
 }

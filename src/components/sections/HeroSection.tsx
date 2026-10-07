@@ -8,9 +8,10 @@ export function HeroSection() {
     <section className="relative section-backdrop min-h-[100dvh] flex items-center pt-24 pb-12 md:pt-32 md:pb-20">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
-          {/* حذف motion.div و استفاده از انیمیشن CSS */}
-          <div className="space-y-6 md:space-y-8 text-center lg:text-right animate-fade-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-primary text-xs md:text-sm font-semibold border border-primary/20">
+          {/* ⚡️ نکته LCP: تیتر h1 عمداً بدون انیمیشن و بلافاصله paint می‌شود —
+              هر opacity:0 روی h1، زمان ثبت LCP را به بعد از انیمیشن می‌برد */}
+          <div className="space-y-6 md:space-y-8 text-center lg:text-right">
+            <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-primary text-xs md:text-sm font-semibold border border-primary/20" style={{ animationDelay: "0.05s" }}>
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
@@ -27,13 +28,15 @@ export function HeroSection() {
               <span className="text-gradient">سطحی تازه</span> می‌بریم
             </h1>
 
+            {/* ⚡️ این پاراگراف از h1 بزرگ‌تر است — اگر انیمیشن opacity داشته باشد
+                خودش LCP می‌شود و زمان ثبت را عقب می‌برد؛ عمداً static است */}
             <p className="text-base md:text-lg text-muted-custom leading-relaxed max-w-xl mx-auto lg:mx-0">
               با استراتژی‌های پیشرفته بازاریابی دیجیتال، طراحی وب‌سایت‌های
               سه‌بعدی با Three.js و اتوماسیون هوشمند با n8n، رشد کسب‌وکار شما
               را تسریع می‌کنیم.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="animate-fade-up flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" style={{ animationDelay: "0.25s" }}>
               <Link
                 href="#contact"
                 className="group relative px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-xl font-bold text-white overflow-hidden transition-all hover:shadow-2xl hover:shadow-primary/30 text-center"
@@ -52,7 +55,7 @@ export function HeroSection() {
               </Link>
             </div>
 
-            <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6 pt-4 border-t border-custom">
+            <div className="animate-fade-up flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6 pt-4 border-t border-custom" style={{ animationDelay: "0.35s" }}>
               {["تیم متخصص سئو", "تحویل به‌موقع", "پشتیبانی مستمر"].map((item) => (
                 <div key={item} className="flex items-center gap-2 text-xs md:text-sm text-muted-custom">
                   <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-500" />

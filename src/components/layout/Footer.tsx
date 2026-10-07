@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { siteConfig } from "@/lib/metadata";

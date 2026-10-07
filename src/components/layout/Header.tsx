@@ -50,7 +50,7 @@ export function Header() {
           <Logo size={40} />
 
           <nav
-            className="hidden md:flex items-center gap-8 text-sm font-medium"
+            className="hidden md:flex items-center gap-8 text-sm font-semibold"
             aria-label="منوی اصلی"
           >
             {navLinks.map((link) => (

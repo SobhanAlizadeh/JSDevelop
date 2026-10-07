@@ -1,13 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Code, BarChart, Cpu, Users } from "lucide-react";
-import { useInView } from "@/hooks/useInView";
+import { Reveal } from "@/components/ui/Reveal";
 import { PartnerMarquee } from "@/components/ui/PartnerMarquee";
 
 export function AboutSection() {
-  const { ref, isInView } = useInView();
-
   return (
     <section
       id="about"
@@ -16,12 +13,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 sm:px-6">
         {/* گرید اصلی درباره ما */}
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
-          <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: -20, scale: 0.95 }} // استفاده از transform
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8 }}
-          >
+          <Reveal>
             <span className="text-accent font-semibold tracking-wider text-xs md:text-sm uppercase">
               درباره ما
             </span>
@@ -50,15 +42,10 @@ export function AboutSection() {
                 <p className="text-primary text-sm">بنیان‌گذار و مهندس سئو</p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
           {/* کارت‌های آیکون */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
+          <Reveal delay={200} className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-3xl blur-3xl opacity-20"></div>
             <div className="relative glass-panel p-6 md:p-8 rounded-3xl border border-custom">
               <div className="grid grid-cols-2 gap-4">
@@ -76,24 +63,18 @@ export function AboutSection() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
 
         {/* ===== Marquee شرکا - تمام عرض ===== */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="mt-16 md:mt-24"
-        >
+        <Reveal delay={150} className="mt-16 md:mt-24">
           <h3 className="text-xs md:text-sm font-semibold text-muted-custom mb-6 uppercase tracking-wider text-center">
             شرکای معتبر ما
           </h3>
 
           {/* دیگر نیازی به کلاس‌های منفی مارجین نیست */}
           <PartnerMarquee />
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

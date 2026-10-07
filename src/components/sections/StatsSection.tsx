@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
 
 const stats = [
@@ -18,20 +17,18 @@ export function StatsSection() {
       <div ref={ref} className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
           {stats.map((stat, index) => (
-            <motion.div
+            <div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="space-y-2"
+              className={`reveal space-y-2 ${isInView ? "is-visible" : ""}`}
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="text-3xl md:text-5xl font-black text-gradient">
                 {stat.value}
               </div>
-              <div className="text-muted-custom text-sm md:text-base font-medium">
+              <div className="text-muted-custom text-sm md:text-base font-semibold">
                 {stat.label}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -7,7 +7,6 @@
     "@react-three/fiber": "^9.7.0",
     "@react-three/postprocessing": "^3.1.1",
     "@types/three": "^0.186.0",
-    "framer-motion": "^13.4.0",
     "lucide-react": "^1.47.0",
     "next": "16.3.5",
     "next-themes": "^0.4.6",
@@ -32,10 +31,12 @@
     "lint": "next lint"
   },
   "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11",
-    "not op_mini all"
+    "chrome >= 105",
+    "edge >= 105",
+    "firefox >= 104",
+    "and_chr >= 105",
+    "safari >= 15.4",
+    "ios_saf >= 15.4",
+    "not dead"
   ]
 }

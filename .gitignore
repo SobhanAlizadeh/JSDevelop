@@ -49,3 +49,10 @@ skills/
 upload/
 worklog.md
 bun.lock
+lh-*.json
+lh-*-0.trace.json
+lh-*-0.devtoolslog.json
+prod.log
+tool-results/
+*.trace.json
+*.devtoolslog.json
