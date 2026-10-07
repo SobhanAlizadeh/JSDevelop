@@ -139,7 +139,7 @@ export function ContactSection() {
             </div>
           </div>
 
-          <div className="hidden md:block h-12 w-px bg-custom"></div>
+          <div className="hidden md:block h-12 w-px bg-border"></div>
 
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">

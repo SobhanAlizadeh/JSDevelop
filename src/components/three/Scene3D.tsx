@@ -1,35 +1,44 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState } from "react";
 import { TorusKnot } from "./TorusKnot";
 import { Particles } from "./Particles";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
-export function Scene3D() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [hasWebGL, setHasWebGL] = useState(true); // وضعیت پشتیبانی WebGL
+// تشخیص موبایل — چون این کامپوننت فقط سمت کلاینت mount می‌شود،
+// می‌توانیم مستقیم از window بخوانیم تا اولین رندر از قبل درست باشد (بدون رندر دوباره)
+function detectIsMobile(): boolean {
+  if (typeof window === "undefined") return true;
+  return (
+    window.innerWidth < 768 ||
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+  );
+}
 
-  useEffect(() => {
-    // تشخیص موبایل
-    setIsMobile(window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    
-    // بررسی پشتیبانی WebGL
-    try {
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      if (!gl) {
-        setHasWebGL(false);
-      }
-    } catch (e) {
-      setHasWebGL(false);
-    }
-  }, []);
+// بررسی پشتیبانی WebGL در همان رندر اول
+function detectWebGL(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl =
+      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    return Boolean(gl);
+  } catch {
+    return false;
+  }
+}
+
+export function Scene3D() {
+  // مقداردهی اولیه همزمان با اولین رندر — بدون پرش dpr/تعداد ذرات روی موبایل
+  const [isMobile] = useState(detectIsMobile);
+  const [hasWebGL, setHasWebGL] = useState(detectWebGL);
 
   // اگر WebGL پشتیبانی نشد، یک پس‌زمینه ساده CSS نمایش دهیم (بدون کرش)
   if (!hasWebGL) {
     return (
-      <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 opacity-20 animate-pulse" />
+      <div className="fixed inset-0 z-0 scene-placeholder animate-pulse" />
     );
   }
 
@@ -46,7 +55,7 @@ export function Scene3D() {
         style={{ width: "100%", height: "100%", display: "block" }}
         // ⬇️ مدیریت خطای داخلی Three.js
         onCreated={({ gl }) => {
-          gl.domElement.addEventListener('webglcontextlost', (e) => {
+          gl.domElement.addEventListener("webglcontextlost", (e) => {
             e.preventDefault();
             console.warn("WebGL Context Lost - Falling back to static background");
             setHasWebGL(false);
@@ -63,7 +72,8 @@ export function Scene3D() {
 
           {!isMobile && (
             <EffectComposer>
-              <Bloom intensity={1.2} luminanceThreshold={0.1} luminanceSmoothing={0.4} height={300} />
+              {/* آستانه لومینانس بالاتر: در لایت‌مود همه‌چیز نمی‌درخشد و GPU کمتر درگیر می‌شود */}
+              <Bloom intensity={1.1} luminanceThreshold={0.25} luminanceSmoothing={0.4} height={300} />
             </EffectComposer>
           )}
         </Suspense>

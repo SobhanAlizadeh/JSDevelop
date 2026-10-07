@@ -2,12 +2,11 @@
 import { HeroSection } from "@/components/sections/HeroSection";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
-import { PortfolioSection } from "@/components/sections/PortfolioSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { siteConfig } from "@/lib/metadata";
 import type { Metadata } from "next";
-import { SceneWrapper } from "@/components/three/SceneWrapper"; // ایمپورت کامپوننت جدید
+import { SceneWrapper } from "@/components/three/SceneWrapper";
 
 export const metadata: Metadata = {
   title: "صفحه اصلی",

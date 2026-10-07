@@ -190,15 +190,50 @@
     animation: none;
   }
 }
-/* احترام به تنظیم کاهش حرکت کاربر */
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
+
+/* ============================================
+   سطح بخش‌ها (Stats) — هماهنگ با هر دو تم
+   ============================================ */
+.section-surface {
+  background-color: color-mix(in srgb, var(--card) 55%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ============================================
+   پس‌زمینه صحنه سه‌بعدی — گرادیان هماهنگ با تم
+   قبل از mount شدن WebGL و به‌عنوان fallback
+   ============================================ */
+.scene-placeholder {
+  background:
+    radial-gradient(60% 50% at 70% 30%, rgba(59, 130, 246, 0.12), transparent 70%),
+    radial-gradient(50% 45% at 25% 70%, rgba(139, 92, 246, 0.1), transparent 70%),
+    var(--background);
+}
+
+.dark .scene-placeholder {
+  background:
+    radial-gradient(60% 50% at 70% 30%, rgba(59, 130, 246, 0.2), transparent 70%),
+    radial-gradient(50% 45% at 25% 70%, rgba(139, 92, 246, 0.16), transparent 70%),
+    var(--background);
+}
+
+/* فیدین نرم بوم سه‌بعدی بعد از mount */
+@keyframes sceneFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
-/* احترام به تنظیم کاهش حرکت کاربر */
+
+.scene-fade {
+  animation: sceneFade 0.9s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track {
+  .scene-fade {
     animation: none;
   }
 }

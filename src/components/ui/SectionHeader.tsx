@@ -19,7 +19,7 @@ export function SectionHeader({
       <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-muted-custom font-bold mt-3 mb-4">
         {title}
       </h2>
-      <p className="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto px-4">
+      <p className="text-muted-custom text-sm md:text-lg max-w-2xl mx-auto px-4">
         {subtitle}
       </p>
     </div>

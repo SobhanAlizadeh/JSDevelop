@@ -9,13 +9,13 @@ import { Footer } from "@/components/layout/Footer";
 // فونت فارسی
 
 
-// فونت انگلیسی برای شرکا
+// فونت انگلیسی برای شرکا — preload:false چون فقط در مارکی شرکا استفاده می‌شود و نباید با LCP رقابت کند
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
-  preload: true, // این خط حیاتی است: متن فوراً نمایش داده می‌شود، فونت بعداً لود می‌شود
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -26,7 +26,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#030712",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#eeeeee" },
+    { media: "(prefers-color-scheme: dark)", color: "#030712" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -65,11 +68,12 @@ const websiteSchema = {
 };
 const vazir = Vazirmatn({
   subsets: ["arabic"],
-  weight: ["400", "500", "600", "700", "800"], // وزن‌های غیرضروری حذف شدند تا حجم فونت کمتر شود
+  // فقط وزن‌های واقعاً استفاده‌شده: ۴۰۰ (بدنه)، ۵۰۰ (متوسط)، ۷۰۰ (بولد)، ۹۰۰ (بلک)
+  weight: ["400", "500", "700", "900"],
   variable: "--font-vazir",
   display: "swap",
   preload: true,
-  adjustFontFallback: false, // این خط باعث می‌شود مرورگر سریع‌تر فونت را جایگزین کند
+  // adjustFontFallback پیش‌فرض (true) باقی می‌ماند تا فونت جایگزین اندازه دقیق داشته باشد و CLS صفر بماند
 });
 export default function RootLayout({
   children,
@@ -85,9 +89,9 @@ export default function RootLayout({
     >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
-       <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        {/* preload لوگو حذف شد — کامپوننت Logo با priority خودش preload صحیح می‌سازد */}
+        <link rel="manifest" href="/manifest.webmanifest" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -102,13 +106,10 @@ export default function RootLayout({
         />
       </head>
 
-<body
-  className={`${vazir.className} antialiased selection:bg-primary selection:text-white`}
-  style={{
-    backgroundColor: "#030712",
-    color: "#f8fafc",
-  }}
->        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      {/* رفع باگ لایت‌مود: استایل inline تیره حذف شد — رنگ‌ها از متغیرهای CSS در globals.css می‌آیند */}
+      <body
+        className={`${vazir.className} antialiased bg-background text-foreground selection:bg-primary selection:text-white`}
+      >        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:z-50 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"

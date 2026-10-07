@@ -20,9 +20,6 @@ interface Service {
   workflows?: N8nWorkflow[];
 }
 
-// تصویر placeholder برای پروژه‌های در حال ساخت
-const PLACEHOLDER_IMAGE = "/images/None.webp";
-
 const services: Service[] = [
   {
     icon: "workflow",

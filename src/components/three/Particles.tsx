@@ -28,10 +28,16 @@ export function Particles({ count, isMobile }: ParticlesProps) {
     const updateColor = () => {
       const isDark = document.documentElement.classList.contains("dark");
       if (materialRef.current) {
+        // در دارک: بلندینگ افزایشی می‌درخشد؛ در لایت: بلندینگ عادی + رنگ پررنگ‌تر تا ذرات دیده شوند
         materialRef.current.color.set(isDark ? "#a78bfa" : "#6d28d9");
+        materialRef.current.blending = isDark
+          ? THREE.AdditiveBlending
+          : THREE.NormalBlending;
+        materialRef.current.opacity = isDark ? 0.8 : 0.55;
+        materialRef.current.needsUpdate = true;
       }
     };
-    
+
     updateColor();
     const observer = new MutationObserver(() => updateColor());
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
