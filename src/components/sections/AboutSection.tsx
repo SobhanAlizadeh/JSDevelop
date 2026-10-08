@@ -18,7 +18,7 @@ export function AboutSection() {
               درباره ما
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 mb-6 text-heading">
-              شریک دیجیتال قابل اعتماد شما
+              آژانس دیجیتال قابل اعتماد شما در تهران
             </h2>
             <p className="text-muted-custom leading-relaxed mb-6 text-base md:text-lg">
               با بیش از یک دهه تجربه در بازاریابی دیجیتال و توسعه کسب‌وکار، به

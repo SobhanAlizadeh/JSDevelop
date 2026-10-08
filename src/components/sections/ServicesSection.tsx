@@ -204,8 +204,8 @@ export function ServicesSection() {
       <div className="container mx-auto px-4 sm:px-6">
         <SectionHeader
           kicker="خدمات ما"
-          title="راهکارهای جامع برای نیازهای کسب‌وکار شما"
-          subtitle="از طراحی وب‌سایت و سئو تا وب سه‌بعدی و اتوماسیون — همه‌چیز زیر یک سقف"
+          title="طراحی وب‌سایت، سئو و اتوماسیون n8n — زیر یک سقف"
+          subtitle="از طراحی سایت و بهینه‌سازی برای گوگل تا وب سه‌بعدی و اتوماسیون کسب‌وکار — همه‌چیز زیر یک سقف"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">

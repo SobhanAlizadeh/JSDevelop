@@ -5,6 +5,7 @@ import { defaultMetadata, siteConfig } from "@/lib/metadata";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { GoogleAnalytics } from "@/components/analytics/Analytics";
 
 // فونت فارسی
 
@@ -48,7 +49,7 @@ const serviceSchema = {
   image: `${siteConfig.url}/opengraph-image`,
   description: siteConfig.description,
   foundingDate: siteConfig.founded,
-  email: siteConfig.email,
+  // ⚠️ email عمداً حذف شده (Plaintext Emails Test) — تلفن کافی است
   telephone: siteConfig.phone,
   priceRange: "$$",
   address: {
@@ -86,7 +87,8 @@ const serviceSchema = {
     "@type": "ContactPoint",
     telephone: siteConfig.phone,
     contactType: "customer service",
-    email: siteConfig.email,
+    // ⚠️ ایمیل عمداً در اسکیما و HTML نیست (Plaintext Emails Test) —
+    // فقط از طریق کامپوننت امن SafeEmail در مرورگر decode می‌شود
     availableLanguage: ["Persian", "English"],
   },
   sameAs: ["https://x.com/jsdevelop", "https://wa.me/989229033102"],
@@ -174,6 +176,10 @@ export default function RootLayout({
       <body
         className={`${vazir.className} antialiased bg-background text-foreground selection:bg-primary selection:text-white`}
       >        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {/* Google Analytics — فقط وقتی NEXT_PUBLIC_GA_ID در env ست شده باشد لود می‌شود */}
+          {process.env.NEXT_PUBLIC_GA_ID && (
+            <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID} />
+          )}
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:z-50 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"

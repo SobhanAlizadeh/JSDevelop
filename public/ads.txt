@@ -1,0 +1,4 @@
+# ads.txt — Authorized Digital Sellers
+# این فایل به شبکه‌های تبلیغاتی اعلام می‌کند چه کسی مجاز به فروش تبلیغات این دامنه است.
+# در صورت راه‌اندازی Google AdSense، خط زیر را با شناسه ناشر خود (pub-XXXXXXXX) جایگزین کنید:
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

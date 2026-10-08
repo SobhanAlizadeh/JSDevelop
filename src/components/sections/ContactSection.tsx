@@ -3,6 +3,7 @@
 import { MapPin, Phone, Mail, MessageCircle, Clock, ArrowUpLeft } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { siteConfig } from "@/lib/metadata";
+import { SafeEmail, encodedEmail } from "@/components/ui/SafeEmail";
 
 export function ContactSection() {
   const contactCards = [
@@ -25,10 +26,12 @@ export function ContactSection() {
       cta: "تماس بگیرید",
     },
     {
+      // ایمیل با base64 کدگذاری شده — از برداشت توسط ربات‌های اسپم جلوگیری می‌کند
+      // href خالی → کارت به‌جای <a> به <div> تبدیل می‌شود و خود SafeEmail لینک mailto می‌سازد
       icon: Mail,
       title: "ایمیل",
-      value: siteConfig.email,
-      href: `mailto:${siteConfig.email}`,
+      value: encodedEmail,
+      href: "",
       color: "text-accent",
       bgColor: "bg-accent/10",
       cta: "ارسال ایمیل",
@@ -67,12 +70,18 @@ export function ContactSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
           {contactCards.map((card, index) => {
             const IconComponent = card.icon;
+            const isEmailCard = card.title === "ایمیل";
+            const Wrapper = isEmailCard ? "div" : "a";
             return (
               <Reveal key={card.title} delay={index * 100}>
-                <a
-                  href={card.href}
-                  target={card.href.startsWith("http") ? "_blank" : undefined}
-                  rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                <Wrapper
+                  {...(isEmailCard
+                    ? {}
+                    : {
+                        href: card.href,
+                        target: card.href.startsWith("http") ? "_blank" : undefined,
+                        rel: card.href.startsWith("http") ? "noopener noreferrer" : undefined,
+                      })}
                   className="group glass-panel p-6 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center h-full"
                 >
                   {/* آیکون */}
@@ -87,22 +96,39 @@ export function ContactSection() {
                     {card.title}
                   </h3>
 
-                  {/* مقدار */}
-                  <p
-                    className="text-sm text-muted-custom leading-relaxed mb-4 break-all"
-                    dir={card.title === "ایمیل" || card.title === "تماس تلفنی" ? "ltr" : "rtl"}
-                  >
-                    {card.value}
-                  </p>
+                  {/* مقدار — کارت ایمیل: آدرس decode شده به‌صورت لینک mailto امن */}
+                  {isEmailCard ? (
+                    <SafeEmail
+                      encoded={card.value}
+                      className="text-sm text-muted-custom leading-relaxed mb-4 break-all hover:text-accent transition-colors"
+                    />
+                  ) : (
+                    <p
+                      className="text-sm text-muted-custom leading-relaxed mb-4 break-all"
+                      dir={card.title === "تماس تلفنی" ? "ltr" : "rtl"}
+                    >
+                      {card.value}
+                    </p>
+                  )}
 
-                  {/* دکمه CTA */}
-                  <span
-                    className={`mt-auto inline-flex items-center gap-1 text-xs md:text-sm ${card.color} font-semibold group-hover:gap-2 transition-all`}
-                  >
-                    {card.cta}
-                    <ArrowUpLeft className="w-4 h-4" />
-                  </span>
-                </a>
+                  {/* دکمه CTA — کارت ایمیل: CTA هم لینک mailto امن است */}
+                  {isEmailCard ? (
+                    <SafeEmail
+                      encoded={card.value}
+                      className={`mt-auto inline-flex items-center gap-1 text-xs md:text-sm ${card.color} font-semibold group-hover:gap-2 transition-all`}
+                    >
+                      {card.cta}
+                      <ArrowUpLeft className="w-4 h-4" />
+                    </SafeEmail>
+                  ) : (
+                    <span
+                      className={`mt-auto inline-flex items-center gap-1 text-xs md:text-sm ${card.color} font-semibold group-hover:gap-2 transition-all`}
+                    >
+                      {card.cta}
+                      <ArrowUpLeft className="w-4 h-4" />
+                    </span>
+                  )}
+                </Wrapper>
               </Reveal>
             );
           })}

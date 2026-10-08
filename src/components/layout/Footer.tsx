@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/metadata";
 import { Logo } from "@/components/ui/Logo";
+import { SafeEmail, encodedEmail } from "@/components/ui/SafeEmail";
 export function Footer() {
   return (
     <footer className="relative z-10 py-12 md:py-16 border-t border-custom bg-card-custom text-muted-custom">
@@ -70,9 +71,12 @@ export function Footer() {
                 <Phone className="w-4 h-4" />
                 {siteConfig.phone}
               </li>
-              <li className="flex items-center gap-2" dir="ltr">
-                <Mail className="w-4 h-4" />
-                {siteConfig.email}
+              <li className="flex items-center gap-2">
+                <SafeEmail
+                  encoded={encodedEmail}
+                  className="hover:text-primary transition-colors"
+                  showIcon
+                />
               </li>
             </ul>
           </div>
