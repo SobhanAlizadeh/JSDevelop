@@ -3,14 +3,19 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { AboutSection } from "@/components/sections/AboutSection";
+import { FAQSection } from "@/components/sections/FAQSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { siteConfig } from "@/lib/metadata";
 import type { Metadata } from "next";
 import { SceneWrapper } from "@/components/three/SceneWrapper";
 
+// ⚠️ عنوان override نشده تا title کلیدواژه‌محور پیش‌فرض
+// (طراحی وب‌سایت، سئو و اتوماسیون n8n) در تگ <title> بنشیند
 export const metadata: Metadata = {
-  title: "صفحه اصلی",
   description: siteConfig.description,
+  alternates: {
+    canonical: siteConfig.url,
+  },
 };
 
 export default function Home() {
@@ -25,6 +30,7 @@ export default function Home() {
         <StatsSection />
         <ServicesSection />
         <AboutSection />
+        <FAQSection />
         <ContactSection />
       </main>
     </>

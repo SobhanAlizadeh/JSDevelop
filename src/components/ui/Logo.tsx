@@ -12,7 +12,7 @@ export function Logo({ size = 40, className = "", withText = true }: LogoProps) 
     <Link href="/" className={`flex items-center gap-3 group ${className}`}>
       <Image
         src="/logo.webp"
-        alt="JSDevelop Logo"
+        alt="لوگوی JSDevelop — آژانس دیجیتال، طراحی وب‌سایت و سئو"
         width={size}
         height={size}
         sizes={`${size}px`}

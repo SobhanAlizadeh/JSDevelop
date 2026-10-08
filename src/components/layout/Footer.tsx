@@ -10,28 +10,49 @@ export function Footer() {
           <div className="lg:col-span-2">
            <Logo size={40} />
             <p className="leading-relaxed max-w-sm mb-6 text-sm md:text-base">
-              ما با استراتژی‌های پیشرفته بازاریابی دیجیتال و راهکارهای توسعه
-              کسب‌وکار، رشد شما را تسریع می‌کنیم.
+              JSDevelop آژانس دیجیتال در تهران است؛ از طراحی وب‌سایت و سئو تا
+              تبلیغات گوگل و اتوماسیون n8n — از سال ۲۰۰۹ در کنار کسب‌وکارها.
             </p>
           </div>
           <div>
             <h4 className="text-heading font-bold mb-4 text-sm md:text-base">
-              دسترسی سریع
+              خدمات
             </h4>
+            {/* لینک‌سازی داخلی با انکرتکست کلیدواژه‌محور */}
             <ul className="space-y-3 text-sm md:text-base">
               <li>
-                <Link href="#services" className="hover:text-primary transition-colors">
-                  خدمات
+                <Link href="/#services" className="hover:text-primary transition-colors">
+                  طراحی وب‌سایت
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="hover:text-primary transition-colors">
+                <Link href="/#services" className="hover:text-primary transition-colors">
+                  سئو و بهینه‌سازی سایت
+                </Link>
+              </li>
+              <li>
+                <Link href="/#services" className="hover:text-primary transition-colors">
+                  اتوماسیون n8n
+                </Link>
+              </li>
+              <li>
+                <Link href="/#services" className="hover:text-primary transition-colors">
+                  تبلیغات گوگل
+                </Link>
+              </li>
+              <li>
+                <Link href="/#faq" className="hover:text-primary transition-colors">
+                  سوالات متداول
+                </Link>
+              </li>
+              <li>
+                <Link href="/#about" className="hover:text-primary transition-colors">
                   درباره ما
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="hover:text-primary transition-colors">
-                  تماس
+                <Link href="/#contact" className="hover:text-primary transition-colors">
+                  تماس با ما
                 </Link>
               </li>
             </ul>

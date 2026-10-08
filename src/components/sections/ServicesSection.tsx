@@ -205,7 +205,7 @@ export function ServicesSection() {
         <SectionHeader
           kicker="خدمات ما"
           title="راهکارهای جامع برای نیازهای کسب‌وکار شما"
-          subtitle="از سئو و تبلیغات تا وب‌سه‌بعدی و اتوماسیون — همه‌چیز زیر یک سقف"
+          subtitle="از طراحی وب‌سایت و سئو تا وب سه‌بعدی و اتوماسیون — همه‌چیز زیر یک سقف"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">

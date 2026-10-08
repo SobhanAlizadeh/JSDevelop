@@ -4,7 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "JSDevelop",
     short_name: "JSDevelop",
-    description: "Digital Agency for Modern Businesses",
+    description:
+      "آژانس دیجیتال JSDevelop — طراحی وب‌سایت، سئو، تبلیغات گوگل و اتوماسیون n8n",
     start_url: "/",
     display: "standalone",
     background_color: "#030712",

@@ -35,20 +35,52 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-// JSON-LD Schema برای Organization
-const organizationSchema = {
+// JSON-LD Schema — ProfessionalService (زیرمجموعه LocalBusiness/Organization)
+// برای سئوی محلی: geo، ساعت کاری، کاتالوگ کامل خدمات و sameAs
+const serviceSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteConfig.name,
+  "@type": "ProfessionalService",
+  "@id": `${siteConfig.url}/#business`,
+  name: "JSDevelop",
+  alternateName: "آژانس دیجیتال JSDevelop",
   url: siteConfig.url,
   logo: `${siteConfig.url}/logo.png`,
+  image: `${siteConfig.url}/opengraph-image`,
   description: siteConfig.description,
   foundingDate: siteConfig.founded,
+  email: siteConfig.email,
+  telephone: siteConfig.phone,
+  priceRange: "$$",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Tehran",
     addressCountry: "IR",
     streetAddress: siteConfig.address,
+  },
+  // مختصات تقریبی محدوده میرداماد — در صورت تمایل دقیق‌ترش کنید
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 35.7626,
+    longitude: 51.4231,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Saturday",
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+      ],
+      opens: "09:00",
+      closes: "18:00",
+    },
+  ],
+  areaServed: {
+    "@type": "Country",
+    name: "Iran",
   },
   contactPoint: {
     "@type": "ContactPoint",
@@ -56,6 +88,33 @@ const organizationSchema = {
     contactType: "customer service",
     email: siteConfig.email,
     availableLanguage: ["Persian", "English"],
+  },
+  sameAs: ["https://x.com/jsdevelop", "https://wa.me/989229033102"],
+  // کاتالوگ خدمات — همان ۱۲ خدمت صفحه اصلی
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "خدمات دیجیتال JSDevelop",
+    itemListElement: [
+      "طراحی وب‌سایت",
+      "سئو و بهینه‌سازی وب‌سایت",
+      "مدیریت تبلیغات گوگل",
+      "اتوماسیون n8n",
+      "وب سه‌بعدی (Three.js)",
+      "مدیریت شبکه‌های اجتماعی",
+      "ارتقای فروش آنلاین",
+      "توسعه نرم‌افزار",
+      "اپلیکیشن موبایل",
+      "طراحی UI/UX",
+      "تولید محتوا",
+      "هویت بصری",
+    ].map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service,
+        areaServed: "IR",
+      },
+    })),
   },
 };
 
@@ -65,6 +124,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: siteConfig.name,
   url: siteConfig.url,
+  inLanguage: "fa-IR",
 };
 const vazir = Vazirmatn({
   // عربی + لاتین هر دو لازم است: فاصله (U+0020) و نیم‌فاصله در متن فارسی
@@ -99,7 +159,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
+            __html: JSON.stringify(serviceSchema),
           }}
         />
         <script

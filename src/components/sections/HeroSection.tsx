@@ -19,13 +19,14 @@ export function HeroSection() {
               آژانس دیجیتال — از سال ۲۰۰۹
             </div>
 
-            {/* این H1 عنصر LCP است. باید بدون تاخیر JS رندر شود */}
+            {/* این H1 عنصر LCP است. باید بدون تاخیر JS رندر شود —
+                کلیدواژه‌های اصلی (طراحی وب‌سایت، سئو، اتوماسیون n8n) در H1 هستند */}
              <h1
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight text-heading"
               style={{ contain: "layout style paint" }}
             >
-              حضور دیجیتال کسب‌وکار شما را به{" "}
-              <span className="text-gradient">سطحی تازه</span> می‌بریم
+              طراحی وب‌سایت، <span className="text-gradient">سئو</span> و
+              اتوماسیون n8n برای رشد کسب‌وکار شما
             </h1>
 
             {/* ⚡️ این پاراگراف از h1 بزرگ‌تر است — اگر انیمیشن opacity داشته باشد

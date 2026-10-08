@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 export const siteConfig = {
   name: "JSDevelop",
-  title: "JSDevelop | آژانس دیجیتال و توسعه کسب‌وکار",
+  title: "آژانس دیجیتال JSDevelop | طراحی وب‌سایت، سئو و اتوماسیون n8n",
   description:
-    "آژانس دیجیتال JSDevelop — سئو، تبلیغات گوگل، طراحی وب‌سایت سه‌بعدی و اتوماسیون با n8n. از سال ۲۰۰۹ در کنار کسب‌وکارها.",
+    "آژانس دیجیتال JSDevelop از سال ۲۰۰۹ در تهران — طراحی وب‌سایت حرفه‌ای و سه‌بعدی، سئو و صدر نتایج گوگل، مدیریت تبلیغات گوگل و اتوماسیون کسب‌وکار با n8n. مشاوره رایگان بگیرید.",
   url: "https://jsdevelop.ir",
   locale: "fa_IR",
   twitter: "@jsdevelop",
@@ -14,6 +14,39 @@ export const siteConfig = {
   founded: "2009",
 };
 
+// کلیدواژه‌های هدف بر اساس تحلیل رقابت SERP فارسی:
+// — کلیدواژه‌های دم‌بلند با رقابت پایین (اتوماسیون n8n، وب سه‌بعدی) + کلیدواژه‌های اصلی
+export const targetKeywords = [
+  "طراحی وب‌سایت",
+  "طراحی سایت",
+  "آژانس دیجیتال در تهران",
+  "سئو",
+  "بهینه‌سازی وب‌سایت",
+  "سئو تکنیکال",
+  "اتوماسیون n8n",
+  "اتوماسیون کسب‌وکار",
+  "طراحی وب‌سایت سه‌بعدی",
+  "وب سه بعدی",
+  "Three.js",
+  "تبلیغات گوگل",
+  "مدیریت کمپین گوگل ادز",
+  "بازاریابی دیجیتال",
+  "تولید محتوا",
+  "UI/UX",
+  "JSDevelop",
+];
+
+// کد تأیید سرچ کنسول از متغیر محیطی خوانده می‌شود —
+// کافی است GOOGLE_SITE_VERIFICATION یا YANDEX_VERIFICATION را در env ست کنید
+const verification: Metadata["verification"] = {
+  ...(process.env.GOOGLE_SITE_VERIFICATION && {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+  }),
+  ...(process.env.YANDEX_VERIFICATION && {
+    yandex: process.env.YANDEX_VERIFICATION,
+  }),
+};
+
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -21,16 +54,7 @@ export const defaultMetadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: [
-    "سئو",
-    "طراحی وب‌سایت",
-    "اتوماسیون n8n",
-    "وب‌سایت سه‌بعدی",
-    "Three.js",
-    "توسعه نرم‌افزار",
-    "UI/UX",
-    "JSDevelop",
-  ],
+  keywords: targetKeywords,
   authors: [{ name: "JSDevelop", url: siteConfig.url }],
   creator: "JSDevelop",
   publisher: "JSDevelop",
@@ -65,4 +89,5 @@ export const defaultMetadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification,
 };
