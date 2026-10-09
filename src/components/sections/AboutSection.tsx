@@ -39,7 +39,7 @@ export function AboutSection() {
                 <h3 className="font-bold text-heading text-base md:text-lg">
                   طیب علیزاده
                 </h3>
-                <p className="text-primary text-sm">بنیان‌گذار و مهندس سئو</p>
+                <p className="text-primary text-sm">بنیان‌گذار </p>
               </div>
             </div>
           </Reveal>
