@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { Vazirmatn, Space_Grotesk } from "next/font/google"; // ✅ هر دو فونت در یک خط ایمپورت شدند
 import { ThemeProvider } from "next-themes";
 import { defaultMetadata, siteConfig } from "@/lib/metadata";
@@ -177,8 +178,11 @@ export default function RootLayout({
         className={`${vazir.className} antialiased bg-background text-foreground selection:bg-primary selection:text-white`}
       >        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {/* Google Analytics — فقط وقتی NEXT_PUBLIC_GA_ID در env ست شده باشد لود می‌شود */}
+          {/* Suspense: شرط لازم Next.js برای هوک‌های navigation در کامپوننت‌های کلاینت حین prerender */}
           {process.env.NEXT_PUBLIC_GA_ID && (
-            <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID} />
+            <Suspense fallback={null}>
+              <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID} />
+            </Suspense>
           )}
           <a
             href="#main-content"

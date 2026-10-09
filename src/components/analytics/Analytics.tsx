@@ -1,8 +1,13 @@
 "use client";
 
 import Script from "next/script";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+
+// نکته: useSearchParams عمداً استفاده نمی‌شود — در prerender استاتیک بدون Suspense
+// بیلد را می‌شکند (خطای «should be wrapped in a suspense boundary»).
+// GA4 با Enhanced Measurement (Page changes based on browser history events)
+// ناوبری‌های SPA را همراه query string خودکار ردیابی می‌کند.
 
 // تعریف type برای window.gtag
 declare global {
@@ -18,16 +23,14 @@ interface GoogleAnalyticsProps {
 
 export function GoogleAnalytics({ GA_MEASUREMENT_ID }: GoogleAnalyticsProps) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (pathname && typeof window !== "undefined" && window.gtag) {
-      const url = pathname + searchParams.toString();
       window.gtag("config", GA_MEASUREMENT_ID, {
-        page_path: url,
+        page_path: pathname,
       });
     }
-  }, [pathname, searchParams, GA_MEASUREMENT_ID]);
+  }, [pathname, GA_MEASUREMENT_ID]);
 
   return (
     <>
