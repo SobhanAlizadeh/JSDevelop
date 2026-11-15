@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/metadata"; // اطمینان حاصل کنید این فایل وجود دارد
+import { products, productPath } from "@/lib/products";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url; // مثال: https://www.jsdevelop.ir
@@ -11,12 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1.0,
     },
-    // اگر صفحات دیگری دارید، اینجا اضافه کنید:
-    // {
-    //   url: `${baseUrl}/services`,
-    //   lastModified: new Date(),
-    //   changeFrequency: "monthly",
-    //   priority: 0.8,
-    // },
+    // صفحات اختصاصی محصولات — کلمات‌کلیدی مستقل برای هر محصول
+    ...products.map((product) => ({
+      url: `${baseUrl}${productPath(product)}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
   ];
 }

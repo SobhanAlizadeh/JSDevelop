@@ -1,63 +1,16 @@
 // src/components/sections/ProductsSection.tsx
 // Server Component — بدون JS سمت کلاینت
-// محصولات آماده JSDevelop با توضیحات کامل و لینک دسترسی مستقیم.
+// محصولات آماده JSDevelop با توضیحات کامل، لینک صفحه اختصاصی و لینک دسترسی مستقیم.
+// دیتا از src/lib/products.ts (تک منبع حقیقت) می‌آید.
 // اسکیمای ItemList + SoftwareApplication به گوگل کمک می‌کند محصولات را
 // به‌عنوان موجودیت‌های جداگانه (school.jsdevelop.ir و takrah.top) بفهمد.
 
+import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getIcon } from "@/lib/icons";
 import { siteConfig } from "@/lib/metadata";
-import { Check, ExternalLink } from "lucide-react";
-
-interface Product {
-  icon: string;
-  badge: string;
-  title: string;
-  domain: string;
-  url: string;
-  description: string;
-  features: string[];
-  cta: string;
-}
-
-const products: Product[] = [
-  {
-    icon: "graduation-cap",
-    badge: "محصول اختصاصی JSDevelop",
-    title: "سامانه مدیریت پیشرفته مدرسه",
-    domain: "school.jsdevelop.ir",
-    url: "https://school.jsdevelop.ir/",
-    description:
-      "سامانه جامع مدیریت مدرسه برای مدارس و آموزشگاه‌ها: مدیریت دانش‌آموزان و دبیران، ثبت نمرات و صدور خودکار کارنامه، حضور و غیاب، برنامه هفتگی و ارتباط لحظه‌ای با اولیا — همه در یک پنل فارسی، سریع و ساده که بدون آموزش پیچیده استفاده می‌شود.",
-    features: [
-      "مدیریت کامل دانش‌آموزان، کلاس‌ها و سال تحصیلی",
-      "ثبت نمرات و صدور خودکار کارنامه",
-      "حضور و غیاب روزانه با گزارش دقیق",
-      "برنامه هفتگی و مدیریت دبیران",
-      "پورتال اولیا: اطلاع‌رسانی پیام و نمره",
-      "دسترسی نقش‌محور: مدیر، معلم، اولیا و دانش‌آموز",
-    ],
-    cta: "ورود به سامانه مدیریت مدرسه",
-  },
-  {
-    icon: "bot",
-    badge: "هوش مصنوعی",
-    title: "منشی و دستیار هوشمند مطب (تک‌راه)",
-    domain: "takrah.top",
-    url: "https://takrah.top/packages",
-    description:
-      "دستیار هوش مصنوعی که به‌جای منشی برای مطب خصوصی شما کار می‌کند: تماس‌ها و پیام‌های بیماران را ۲۴ ساعته پاسخ می‌دهد، نوبت می‌گیرد و یادآوری می‌کند تا برنامه مطب همیشه منظم بماند و هیچ بیماری به‌خاطر بی‌پاسخی تلفن از دست نرود.",
-    features: [
-      "پاسخگویی خودکار تماس و پیام بیماران با هوش مصنوعی",
-      "نوبت‌دهی آنلاین ۲۴ ساعته، بدون تماس تلفنی",
-      "یادآوری پیامکی نوبت و کاهش نرخ نوزشو (no-show)",
-      "مدیریت برنامه روزانه و مراجعین مطب",
-      "کاهش بار تلفنی مطب و هزینه استخدام منشی",
-      "پکیج‌های متنوع متناسب با اندازه هر مطب",
-    ],
-    cta: "مشاهده پکیج‌ها و تعرفه‌ها",
-  },
-];
+import { products, productPath } from "@/lib/products";
+import { Check, ExternalLink, ArrowLeft } from "lucide-react";
 
 // اسکیمای محصولات — بدون invent کردن قیمت؛ offers عمداً حذف شده است
 const productsSchema = {
@@ -72,7 +25,10 @@ const productsSchema = {
       name: product.title,
       url: product.url,
       description: product.description,
-      applicationCategory: product.icon === "graduation-cap" ? "EducationalApplication" : "BusinessApplication",
+      applicationCategory:
+        product.slug === "school-management"
+          ? "EducationalApplication"
+          : "BusinessApplication",
       operatingSystem: "Web",
       publisher: {
         "@type": "Organization",
@@ -153,16 +109,25 @@ export function ProductsSection() {
                   ))}
                 </ul>
 
-                {/* دکمه دسترسی به محصول */}
-                <a
-                  href={product.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm md:text-base hover:shadow-lg hover:shadow-primary/30 transition-all"
-                >
-                  {product.cta}
-                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
-                </a>
+                {/* دکمه‌ها: صفحه اختصاصی (داخلی، سئو) + دسترسی مستقیم محصول */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href={productPath(product)}
+                    className="flex-1 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-primary/30 bg-primary/10 text-primary font-bold text-sm md:text-base hover:bg-primary/20 transition-colors"
+                  >
+                    جزئیات و امکانات
+                    <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                  </Link>
+                  <a
+                    href={product.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm md:text-base hover:shadow-lg hover:shadow-primary/30 transition-all"
+                  >
+                    {product.cta}
+                    <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                  </a>
+                </div>
               </article>
             );
           })}

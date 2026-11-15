@@ -37,11 +37,12 @@ export function Header() {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
+  // لینک‌ها با / شروع می‌شوند تا از زیرصفحه‌ها (مثل /products/...) هم به سکشن‌های صفحه اصلی برود
   const navLinks = [
-    { href: "#services", label: "خدمات" },
-    { href: "#products", label: "محصولات" },
-    { href: "#about", label: "درباره ما" },
-    { href: "#contact", label: "تماس" },
+    { href: "/#services", label: "خدمات" },
+    { href: "/#products", label: "محصولات" },
+    { href: "/#about", label: "درباره ما" },
+    { href: "/#contact", label: "تماس" },
   ];
 
   return (
@@ -83,7 +84,7 @@ export function Header() {
             </button>
 
             <Link
-              href="#contact"
+              href="/#contact"
               className="hidden md:inline-flex px-5 py-2.5 rounded-full bg-primary text-white font-bold hover:bg-primary/90 transition-all text-sm"
             >
               شروع پروژه
@@ -135,7 +136,7 @@ export function Header() {
           ))}
 
           <a
-            href="#contact"
+            href="/#contact"
             onClick={closeMenu}
             className="mt-4 px-8 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-lg hover:shadow-lg hover:shadow-primary/30 transition-all mobile-menu-item"
           >
