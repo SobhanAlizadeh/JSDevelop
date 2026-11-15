@@ -39,6 +39,7 @@ export function Header() {
 
   const navLinks = [
     { href: "#services", label: "خدمات" },
+    { href: "#products", label: "محصولات" },
     { href: "#about", label: "درباره ما" },
     { href: "#contact", label: "تماس" },
   ];

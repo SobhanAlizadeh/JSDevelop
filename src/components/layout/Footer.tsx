@@ -57,6 +57,38 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
+
+            <h4 className="text-heading font-bold mb-4 mt-8 text-sm md:text-base">
+              محصولات
+            </h4>
+            {/* لینک‌سازی داخلی به سکشن محصولات + لینک مستقیم محصولات */}
+            <ul className="space-y-3 text-sm md:text-base">
+              <li>
+                <Link href="/#products" className="hover:text-primary transition-colors">
+                  محصولات ما
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://school.jsdevelop.ir/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                >
+                  سامانه مدیریت پیشرفته مدرسه
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://takrah.top/packages"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                >
+                  منشی و دستیار هوشمند مطب
+                </a>
+              </li>
+            </ul>
           </div>
           <div>
             <h4 className="text-heading font-bold mb-4 text-sm md:text-base">

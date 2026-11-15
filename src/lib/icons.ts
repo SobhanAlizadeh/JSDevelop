@@ -16,6 +16,8 @@ import {
   Megaphone,
   HeartPulse,
   Ticket,
+  GraduationCap,
+  Bot,
   type LucideIcon,
 } from "lucide-react";
 
@@ -39,6 +41,9 @@ export const iconMap: Record<string, LucideIcon> = {
   megaphone: Megaphone,
   "heart-pulse": HeartPulse,
   ticket: Ticket,
+  // محصولات
+  "graduation-cap": GraduationCap,
+  bot: Bot,
 };
 
 export function getIcon(name: string): LucideIcon | null {
