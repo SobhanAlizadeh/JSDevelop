@@ -3,6 +3,7 @@ import { MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/metadata";
 import { Logo } from "@/components/ui/Logo";
 import { SafeEmail, encodedEmail } from "@/components/ui/SafeEmail";
+import { games, gamePath } from "@/lib/games";
 export function Footer() {
   return (
     <footer className="relative z-10 py-12 md:py-16 border-t border-custom bg-card-custom text-muted-custom">
@@ -88,6 +89,28 @@ export function Footer() {
                   منشی و دستیار هوشمند مطب
                 </a>
               </li>
+            </ul>
+
+            <h4 className="text-heading font-bold mb-4 mt-8 text-sm md:text-base">
+              بازی‌های ما
+            </h4>
+            {/* لینک‌سازی داخلی به صفحه بازی‌ها + صفحات اختصاصی هر بازی */}
+            <ul className="space-y-3 text-sm md:text-base">
+              <li>
+                <Link href="/games" className="hover:text-primary transition-colors">
+                  دانلود بازی‌های اندروید
+                </Link>
+              </li>
+              {games.map((game) => (
+                <li key={game.slug}>
+                  <Link
+                    href={gamePath(game)}
+                    className="hover:text-primary transition-colors"
+                  >
+                    {game.shortTitle}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>

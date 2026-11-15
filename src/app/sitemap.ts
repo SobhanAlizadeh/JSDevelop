@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/metadata"; // اطمینان حاصل کنید این فایل وجود دارد
 import { products, productPath } from "@/lib/products";
+import { games, gamePath } from "@/lib/games";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url; // مثال: https://www.jsdevelop.ir
@@ -18,6 +19,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.9,
+    })),
+    // صفحه بازی‌ها + صفحات اختصاصی هر بازی — کلمات‌کلیدی دانلود بازی اندروید
+    {
+      url: `${baseUrl}/games`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    ...games.map((game) => ({
+      url: `${baseUrl}${gamePath(game)}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
   ];
 }

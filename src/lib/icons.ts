@@ -18,6 +18,11 @@ import {
   Ticket,
   GraduationCap,
   Bot,
+  Gamepad2,
+  Blocks,
+  Swords,
+  Atom,
+  AudioWaveform,
   type LucideIcon,
 } from "lucide-react";
 
@@ -44,6 +49,12 @@ export const iconMap: Record<string, LucideIcon> = {
   // محصولات
   "graduation-cap": GraduationCap,
   bot: Bot,
+  // بازی‌ها
+  "gamepad-2": Gamepad2,
+  blocks: Blocks,
+  swords: Swords,
+  atom: Atom,
+  "audio-waveform": AudioWaveform,
 };
 
 export function getIcon(name: string): LucideIcon | null {
